@@ -40,3 +40,10 @@ python manage.py runserver
 cd telegram_client/
 python main.py
 ```
+
+## Run linter
+
+```bash
+cd ~/Dev/begin_with_yourself_bot_3
+pylint $(git ls-files '*.py')
+```

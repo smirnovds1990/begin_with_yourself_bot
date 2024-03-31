@@ -3,5 +3,9 @@ disable=
     C0114, #  Module docstring
     C0115, #  Class docstring
     C0116, #  Method docstring
+    R0903, 
+    C0103,
+    R0901
+    
 
 ignore-paths=.*/migrations, backend/manage.py

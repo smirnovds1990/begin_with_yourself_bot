@@ -1,0 +1,7 @@
+[MASTER]
+disable=
+    C0114, #  Module docstring
+    C0115, #  Class docstring
+    C0116, #  Method docstring
+
+ignore-paths=.*/migrations, backend/manage.py

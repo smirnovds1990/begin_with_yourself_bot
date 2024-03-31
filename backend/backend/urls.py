@@ -1,4 +1,3 @@
-
 from django.contrib import admin
 from django.urls import include, path
 from drf_yasg.views import get_schema_view

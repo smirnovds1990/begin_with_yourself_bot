@@ -4,10 +4,11 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 
+from profile.models import UserProfile
+
 from .constants import (ACTIVITY_MODIFIERS,
                         GENDER_MODIFIERS,
                         GOAL_MODIFIERS)
-from profile.models import UserProfile
 
 
 @login_required

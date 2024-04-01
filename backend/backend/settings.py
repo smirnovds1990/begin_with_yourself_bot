@@ -37,8 +37,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'rest_framework',
-    'drf_yasg',
+    "nutrition.apps.NutritionConfig",
+    "profile.apps.ProfileConfig",
+    "rest_framework",
+    "drf_yasg",
 ]
 
 MIDDLEWARE = [

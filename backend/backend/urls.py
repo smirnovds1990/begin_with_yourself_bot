@@ -1,10 +1,11 @@
 from django.contrib import admin
 from django.urls import include, path
-from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
-from rest_framework import permissions, routers
+from drf_yasg import openapi
+from rest_framework import routers, permissions
 
 from .views import UserViewSet
+
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)

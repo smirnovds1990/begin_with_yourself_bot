@@ -2,6 +2,7 @@ Django==4.2.11
 djangorestframework==3.15.1
 psycopg2-binary==2.9.9
 aiogram==3.4.1
+aiogram-forms==1.1.1
 python-dotenv==1.0.1
 djoser==2.2.2
 djangorestframework-simplejwt==5.3.1

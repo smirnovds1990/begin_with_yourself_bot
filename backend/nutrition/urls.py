@@ -1,7 +1,7 @@
 from django.urls import path
 
-from .views import calorie_norm
+from .views import CalorieNormView
 
 urlpatterns = [
-    path('calorie-norm/', calorie_norm, name='calorie-norm'),
+    path('calorie-norm/', CalorieNormView.as_view(), name='calorie-norm'),
 ]

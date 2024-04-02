@@ -2,6 +2,7 @@ import asyncio
 
 from aiogram.filters.command import Command
 from aiogram.types import Message
+from aiogram_forms import FormsManager
 
 from config import BOT, DISPATCHER
 
@@ -11,6 +12,14 @@ async def start_message(message: Message):
     await message.answer(
         'Приветствую!\n'
         'Здесь должно быть большое описание, но пока в процессе разработки :)')
+
+
+@DISPATCHER.message(Command('register'))
+async def command_register(message: Message, forms: FormsManager):
+    # Сделать импорт необходимо с целью добавления формы в меню бота
+    # НЕ Я ЭТО ПРИДУМАЛ Х)
+    from forms import RegisterForm  # noqa!
+    await forms.show('registration')
 
 
 async def main():

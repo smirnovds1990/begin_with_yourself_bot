@@ -52,4 +52,6 @@ urlpatterns = [
         ),
         name='schema-redoc'
     ),
+    path('auth/', include('djoser.urls')),
+    path('auth/', include('djoser.urls.jwt')),
 ]

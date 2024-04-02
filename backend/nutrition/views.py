@@ -12,7 +12,7 @@ from .constants import ACTIVITY_MODIFIERS, GENDER_MODIFIERS, GOAL_MODIFIERS
 class CalorieNormView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         profile = get_object_or_404(UserProfile, user=request.user)
         current_year = date.today().year
         age = current_year - profile.year_of_birth

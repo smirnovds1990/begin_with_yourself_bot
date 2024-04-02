@@ -34,13 +34,13 @@ class RegisterForm(Form):
     height = fields.TextField(
         'Рост, в см',
         min_length=MIN_LENGTH,
-        max_length=MAX_HEIGHT_LENGTH,
+        max_length=MAX_WEIGHT_LENGTH,
         validators=[validate_height]
     )
     current_weight = fields.TextField(
         'Ваш текущий вес',
         min_length=MIN_LENGTH,
-        max_length=MAX_WEIGHT_LENGTH,
+        max_length=MAX_HEIGHT_LENGTH,
         validators=[validate_weight]
     )
     birth_date = fields.TextField(
@@ -52,10 +52,16 @@ class RegisterForm(Form):
 
     @classmethod
     async def attach_to(cls, my_disp):
+        '''
+        Функция, привязывающая FormDispatcher в Диспатчеру бота.
+        '''
         await dpf.attach(my_disp)
 
     @classmethod
     async def callback(cls, message: Message, forms: FormsManager, **data):
+        '''
+        Функция, возвращающая ответ на заполненную форму.
+        '''
         data = await forms.get_data(RegisterForm)
         print(await compile_registration_data(data))  # Для тестирования
         await message.answer(f'Спасибо за регистрацию, {data["first_name"]}!')

@@ -19,6 +19,7 @@ async def command_register(message: Message, forms: FormsManager):
     # Сделать импорт необходимо с целью добавления формы в меню бота
     # НЕ Я ЭТО ПРИДУМАЛ Х)
     from forms import RegisterForm  # noqa!
+    await message.answer('Давайте зарегиструемся!')
     await forms.show('registration')
 
 

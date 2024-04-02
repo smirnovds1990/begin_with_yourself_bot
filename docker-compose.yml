@@ -5,7 +5,7 @@ services:
   db:
     image: postgres:16.2-alpine
     env_file:
-      - backend/backend/.env
+      - backend/.env
     volumes:
       - pg_data:/var/lib/postgresql/data
     ports:

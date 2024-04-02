@@ -47,3 +47,16 @@ python main.py
 cd ~/Dev/begin_with_yourself_bot_3
 pylint $(git ls-files '*.py')
 ```
+
+## Run backend with PostgreSQL in Docker
+
+```bash
+cd begin_with_yourself_bot_3/
+docker compose up
+```
+in a separate terminal:
+```bash
+cd backend/
+python manage.py migrate
+python manage.py runserver
+```

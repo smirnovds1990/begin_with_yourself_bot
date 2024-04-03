@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     'djoser',
-    'users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
@@ -127,7 +126,6 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-AUTH_USER_MODEL = "users.CustomUser"
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'sleep.apps.SleepConfig',
     "nutrition.apps.NutritionConfig",
     "profile.apps.ProfileConfig",
     "rest_framework",

@@ -3,9 +3,11 @@ disable=
     C0114, #  Module docstring
     C0115, #  Class docstring
     C0116, #  Method docstring
-    R0903, 
-    C0103,
-    R0901
+    R0903, #  Too few public methods
+    C0103, #  Pylint doesn't like id attribute
+    R0901, # Too many entities in file
+    E1101, #  Dynamic attributes
+    R0801, #  Too few public methods
     
 
 ignore-paths=.*/migrations, backend/manage.py

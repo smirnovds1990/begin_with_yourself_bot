@@ -30,6 +30,10 @@ urlpatterns = [
         include(router.urls)
     ),
     path(
+        'nutrition/',
+        include('nutrition.urls')
+    ),
+    path(
         'swagger<format>/',
         schema_view.without_ui(
             cache_timeout=0

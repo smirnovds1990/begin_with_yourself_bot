@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 from os import getenv
 from pathlib import Path
+from datetime import timedelta
 
 from dotenv import load_dotenv
 
@@ -40,8 +41,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'rest_framework',
-    'drf_yasg',
+    'sleep.apps.SleepConfig',
+    "nutrition.apps.NutritionConfig",
+    "profile.apps.ProfileConfig",
+    "rest_framework",
+    "drf_yasg",
+    'djoser',
 ]
 
 MIDDLEWARE = [
@@ -131,8 +136,19 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
+
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
+
+
+SIMPLE_JWT = {
+   'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+   'AUTH_HEADER_TYPES': ('Bearer',),
 }

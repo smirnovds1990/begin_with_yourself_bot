@@ -30,6 +30,10 @@ urlpatterns = [
         include(router.urls)
     ),
     path(
+        'nutrition/',
+        include('nutrition.urls')
+    ),
+    path(
         'swagger<format>/',
         schema_view.without_ui(
             cache_timeout=0
@@ -52,4 +56,7 @@ urlpatterns = [
         ),
         name='schema-redoc'
     ),
+    path('sleeping/', include('sleep.urls')),
+    path('auth/', include('djoser.urls')),
+    path('auth/', include('djoser.urls.jwt')),
 ]

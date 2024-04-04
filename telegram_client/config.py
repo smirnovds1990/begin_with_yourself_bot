@@ -67,13 +67,17 @@ class RegisterForm(Form):
         await dpf.attach(my_disp)
 
     @classmethod
-    async def callback(cls, message: Message, forms: FormsManager, **data):
+    async def callback(
+         cls, message: Message,
+         forms: FormsManager,
+         **data):  # pylint: disable=arguments-differ
         '''
         Функция, возвращающая ответ на заполненную форму.
         '''
-        data = await forms.get_data(RegisterForm)
-        print(await compile_registration_data(data))  # Для тестирования
-        await message.answer(f'Спасибо за регистрацию, {data["first_name"]}!')
+        form_data = await forms.get_data(RegisterForm)
+        print(await compile_registration_data(form_data))  # Для тестирования
+        await message.answer(
+            f'Спасибо за регистрацию, {form_data["first_name"]}!')
 
 
 dpf.attach(DISPATCHER)

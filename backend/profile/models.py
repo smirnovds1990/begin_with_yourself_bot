@@ -9,7 +9,8 @@ from .constants import (GENDER_CHOICES,
 class UserProfile(models.Model):
     user = models.OneToOneField(
         User,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        verbose_name="Пользователь"
     )
     gender = models.CharField(
         max_length=1,
@@ -35,3 +36,10 @@ class UserProfile(models.Model):
         choices=ACTIVITY_CHOICES,
         verbose_name='Активность'
     )
+
+    class Meta:
+        verbose_name = 'профиль пользователя'
+        verbose_name_plural = 'Профили пользователей'
+
+    def __str__(self):
+        return f"Профиль пользователя {self.user.username}"

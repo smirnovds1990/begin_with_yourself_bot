@@ -7,7 +7,9 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .constants import ACTIVITY_MODIFIERS, GENDER_MODIFIERS, GOAL_MODIFIERS
+from .constants import (ACTIVITY_MODIFIERS, 
+                        GENDER_MODIFIERS,
+                        GOAL_MODIFIERS)
 
 
 class CalorieNormView(APIView):

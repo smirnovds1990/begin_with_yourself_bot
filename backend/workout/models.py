@@ -1,9 +1,9 @@
 from django.db import models
 
-from .validators import validate_video_extension
-
 from profile.constants import (GENDER_CHOICES,
-                               GOAL_CHOICES) 
+                               GOAL_CHOICES)
+
+from .validators import validate_video_extension
 
 
 class WorkoutType(models.Model):

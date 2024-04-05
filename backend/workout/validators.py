@@ -9,4 +9,4 @@ def validate_video_extension(value):
 
     ext = os.path.splitext(value.name)[1]
     if not ext.lower() in VALID_VIDEO_EXTENSIONS:
-        raise ValidationError(u'Неподдерживаемый формат файла.')
+        raise ValidationError('Неподдерживаемый формат файла.')

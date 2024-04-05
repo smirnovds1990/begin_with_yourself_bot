@@ -8,7 +8,8 @@ from .validators import validate_video_extension
 
 class WorkoutType(models.Model):
     """
-    Определяет тип тренировки, включая название и описание.
+    Определяет тип тренировки,
+    включая название и описание.
     """
     title = models.CharField(
         max_length=255,
@@ -39,7 +40,8 @@ class WorkoutType(models.Model):
 
 class Workout(models.Model):
     """
-    Определяет конкретную тренировку, включая её название, тип, описание и видео.
+    Определяет конкретную тренировку,
+    включая её название, тип, описание и видео.
     """
     title = models.CharField(
         max_length=255,

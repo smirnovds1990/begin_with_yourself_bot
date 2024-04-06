@@ -60,3 +60,8 @@ cd backend/
 python manage.py migrate
 python manage.py runserver
 ```
+run migrations for tg_bot database:
+```bash
+cd telegram_client/
+alembic upgrade head
+```

@@ -14,6 +14,6 @@ class Base(DeclarativeBase):
 
 
 class TelegramUser(Base):
-    username = Column(String(MAX_NAME_LENGTH))
+    username = Column(String(MAX_NAME_LENGTH), nullable=True)
     tg_user_id = Column(Integer)
-    token = Column(String(TOKEN_LENGTH))
+    token = Column(String(TOKEN_LENGTH), nullable=True)

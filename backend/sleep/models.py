@@ -10,11 +10,6 @@ class Sleep(models.Model):
     sleep_time = models.DateTimeField(
         verbose_name='Время сна', auto_now_add=True
     )
-    wake_time = models.DateTimeField(
-        verbose_name='Время пробуждения',
-        null=True,
-        blank=True,
-    )
     is_sleeping = models.BooleanField(
         verbose_name='Признак "лёг"', default=True
     )

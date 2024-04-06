@@ -2,7 +2,7 @@ import asyncio
 from random import choice
 
 from aiogram.filters.command import Command
-from aiogram.types import Message
+from aiogram.types import Message, User
 from aiogram_forms import FormsManager
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
@@ -12,9 +12,15 @@ from constants import NOTIFICATIONS
 
 @DISPATCHER.message(Command('start'))
 async def start_message(message: Message):
+    user: User = message.from_user
+    username = f'{user.id}'
+    print(username)  # Юзернейм для регистрации в API
     await message.answer(
         'Приветствую!\n'
-        'Здесь должно быть большое описание, но пока в процессе разработки :)')
+        'Здесь должно быть большое описание, '
+        'но пока в процессе разработки :)\n'
+        'Зарегистроваться: /register'
+    )
 
 
 @DISPATCHER.message(Command('register'))

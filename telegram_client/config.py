@@ -7,11 +7,11 @@ from aiogram_forms import dispatcher as dpf
 from aiogram_forms import fields
 from dotenv import load_dotenv
 
-from constants import (DATE_LENGTH, MAX_HEIGHT_LENGTH, MAX_NAME_LENGTH,
-                       MAX_WEIGHT_LENGTH, MIN_LENGTH)
+from constants import (ACTIVITIES, AIMS, MAX_HEIGHT_LENGTH, MAX_NAME_LENGTH,
+                       MAX_WEIGHT_LENGTH, MIN_LENGTH, SEXS, YEAR_LENGTH)
 from functions import compile_registration_data
-from validators import (validate_date, validate_height, validate_name,
-                        validate_weight)
+from validators import (validate_height, validate_name, validate_weight,
+                        validate_year)
 
 load_dotenv()
 
@@ -22,23 +22,10 @@ DISPATCHER = Dispatcher()
 
 @dpf.register('training')
 class TrainingForm(Form):
-    aim = fields.ChoiceField(
-        'Ваша цель',
-        choices=(
-            ('Набор массы', 'MASS'),
-            ('Поддержание', 'KEEP'),
-            ('Похудание', 'LOSS')
-        )
-    )
+    aim = fields.ChoiceField('Ваша цель', choices=AIMS)
     activity = fields.ChoiceField(
         'Наиболее подходящее описание вашего образа жизни',
-        choices=(
-            ('Сидячий образ жизни', 'PASS'),
-            ('Тренировки от 30 мин 1-3 раза в неделю', 'TR13'),
-            ('Тренировки 3-5 раза в неделю', 'TR35'),
-            ('Интенсивные тренировки 6-7 раз в неделю', 'TR67'),
-            ('Тренировки каждый день', 'TRED')
-        )
+        choices=ACTIVITIES
     )
     current_weight = fields.TextField(
         'Ваш текущий вес',
@@ -75,24 +62,18 @@ class RegisterForm(Form):
         max_length=MAX_NAME_LENGTH,
         validators=[validate_name]
     )
-    sex = fields.ChoiceField(
-        'Выберите пол',
-        choices=(
-            ('Мужской', 'М'),
-            ('Женский', 'Ж')
-        )
-    )
+    sex = fields.ChoiceField('Выберите пол', choices=SEXS)
     height = fields.TextField(
         'Рост, в см',
         min_length=MIN_LENGTH,
         max_length=MAX_HEIGHT_LENGTH,
         validators=[validate_height]
     )
-    birth_date = fields.TextField(
-        'Дата рождения',
-        min_length=DATE_LENGTH,
-        max_length=DATE_LENGTH,
-        validators=[validate_date]
+    birth_year = fields.TextField(
+        'Год рождения',
+        min_length=YEAR_LENGTH,
+        max_length=YEAR_LENGTH,
+        validators=[validate_year]
     )
 
     @classmethod

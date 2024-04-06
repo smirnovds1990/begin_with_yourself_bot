@@ -28,6 +28,10 @@ urlpatterns = [
         include('nutrition.urls')
     ),
     path(
+        'workout/',
+        include('workout.urls')
+    ),
+    path(
         'swagger<format>/',
         schema_view.without_ui(
             cache_timeout=0

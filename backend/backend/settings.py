@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "drf_yasg",
     "djoser",
+    "django_filters",
 ]
 
 MIDDLEWARE = [
@@ -161,3 +162,15 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LANGUAGE_CODE = 'ru'
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+            'description': "'Bearer <токен>'"
+        },
+    },
+    'USE_SESSION_AUTH': False,
+}

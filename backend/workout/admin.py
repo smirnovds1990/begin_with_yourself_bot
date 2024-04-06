@@ -46,13 +46,28 @@ class WorkoutAdmin(admin.ModelAdmin):
 class WorkoutProgramDetailInline(admin.TabularInline):
     model = WorkoutProgramDetail
     extra = 1
-    fields = ('workout', 'order', 'repetitions', 'sets', 'duration')
+    fields = (
+        'workout',
+        'order',
+        'repetitions',
+        'sets',
+        'duration'
+    )
 
 
 class WorkoutProgramAdmin(admin.ModelAdmin):
-    list_display = ('gender', 'goal')
-    list_filter = ('gender', 'goal')
-    search_fields = ('gender', 'goal')
+    list_display = (
+        'gender',
+        'goal'
+    )
+    list_filter = (
+        'gender',
+        'goal'
+    )
+    search_fields = (
+        'gender',
+        'goal'
+    )
     inlines = [WorkoutProgramDetailInline]
 
 

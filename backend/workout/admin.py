@@ -1,7 +1,11 @@
 from django.contrib import admin
+from django.db.models import Max
 from django.utils.html import format_html
 
-from .models import Workout, WorkoutProgram, WorkoutType
+from .models import (Workout,
+                     WorkoutProgram,
+                     WorkoutProgramDetail,
+                     WorkoutType)
 
 
 class WorkoutAdmin(admin.ModelAdmin):
@@ -39,27 +43,17 @@ class WorkoutAdmin(admin.ModelAdmin):
     video_preview.short_description = "Предпросмотр видео"
 
 
-class WorkoutProgramAdmin(admin.ModelAdmin):
-    list_display = (
-        '__str__',
-        'gender',
-        'goal',
-    )
-    list_filter = (
-        'gender',
-        'goal'
-    )
-    search_fields = (
-        'workouts__title',
-        'gender',
-        'goal'
-    )
-    filter_horizontal = (
-        'workouts',
-    )
+class WorkoutProgramDetailInline(admin.TabularInline):
+    model = WorkoutProgramDetail
+    extra = 1
+    fields = ('workout', 'order', 'repetitions', 'sets', 'duration')
 
-    class Meta:
-        model = WorkoutProgram
+
+class WorkoutProgramAdmin(admin.ModelAdmin):
+    list_display = ('gender', 'goal')
+    list_filter = ('gender', 'goal')
+    search_fields = ('gender', 'goal')
+    inlines = [WorkoutProgramDetailInline]
 
 
 class WorkoutTypeAdmin(admin.ModelAdmin):

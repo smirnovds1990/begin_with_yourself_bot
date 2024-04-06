@@ -4,9 +4,6 @@ from sleep.models import Sleep
 
 
 class SleepSerializer(serializers.ModelSerializer):
-    client = serializers.SlugRelatedField(
-        slug_field='username', read_only=True
-    )
 
     class Meta:
         model = Sleep
@@ -14,7 +11,6 @@ class SleepSerializer(serializers.ModelSerializer):
             'id',
             'sleep_time',
             'is_sleeping',
-            'client',
         )
 
     def create(self, validated_data):

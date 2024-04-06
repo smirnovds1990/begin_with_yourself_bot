@@ -2,7 +2,7 @@ NAMES_PATTERN = r'[А-Яа-я]'
 WIGHT_PATTERN = r'^[0-9]{2,3}?\.?[0-9]{0,2}$'
 HEIGHT_PATTERN = r'^[0-9]{3,3}$'
 DATE_PATTERN = r'^[0-9]{2}\.[0-9]{2}\.[1-2][0-9]{3}$'
-BIRTH_YEAR_PATTERN = r'^[1-2][0-9]{3}'
+BIRTH_YEAR_PATTERN = r'^[1-2][0-9]{3}$'
 
 MIN_LENGTH = 2
 MAX_NAME_LENGTH = 25

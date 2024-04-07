@@ -5,10 +5,8 @@ from drf_yasg import openapi
 from rest_framework import routers, permissions
 
 from sleep.views import SleepViewSet
-from .views import UserViewSet
 
 router = routers.DefaultRouter()
-router.register(r'users', UserViewSet)
 router.register('sleep', SleepViewSet)
 
 schema_view = get_schema_view(

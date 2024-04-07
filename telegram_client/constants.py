@@ -2,9 +2,34 @@ NAMES_PATTERN = r'[А-Яа-я]'
 WIGHT_PATTERN = r'^[0-9]{2,3}?\.?[0-9]{0,2}$'
 HEIGHT_PATTERN = r'^[0-9]{3,3}$'
 DATE_PATTERN = r'^[0-9]{2}\.[0-9]{2}\.[1-2][0-9]{3}$'
+BIRTH_YEAR_PATTERN = r'^[1-2][0-9]{3}$'
 
 MIN_LENGTH = 2
 MAX_NAME_LENGTH = 25
-MAX_WEIGHT_LENGTH = 3
-MAX_HEIGHT_LENGTH = 5
+MAX_HEIGHT_LENGTH = 3
+MAX_WEIGHT_LENGTH = 6
 DATE_LENGTH = 10
+YEAR_LENGTH = 4
+
+AIMS = (
+    ('Набор массы', 'MASS'),
+    ('Поддержание', 'KEEP'),
+    ('Похудание', 'LOSS')
+)
+ACTIVITIES = (
+    ('Сидячий образ жизни', 'PASS'),
+    ('Тренировки от 30 мин 1-3 раза в неделю', 'TR13'),
+    ('Тренировки 3-5 раза в неделю', 'TR35'),
+    ('Интенсивные тренировки 6-7 раз в неделю', 'TR67'),
+    ('Тренировки каждый день', 'TRED')
+)
+SEXS = (
+    ('Мужской', 'М'),
+    ('Женский', 'Ж')
+)
+
+NOTIFICATIONS = (
+    'ОЧЕНЬ ВАЖНО ЗАНИМАТЬСЯ!',
+    'НУ ПРАВДА, ПОЗАНИМАЙСЯ УЖЕ!',
+    'НЕ ЗАБЫВАЙ СПАТЬ!'
+)

@@ -79,12 +79,6 @@ class WorkoutProgram(models.Model):
     ориентированных на определенный пол и цель.
     Каждая программа уникальна по комбинации пола и цели.
     """
-    workouts = models.ManyToManyField(
-        Workout,
-        through='WorkoutProgramDetail',
-        related_name='programs',
-        verbose_name='Тренировки'
-    )
     gender = models.CharField(
         max_length=1,
         choices=GENDER_CHOICES,

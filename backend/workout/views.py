@@ -53,7 +53,7 @@ class WorkoutTypeList(APIView):
 
 class WorkoutTypeDetail(APIView):
 
-    def get(self, id):
-        workout_type = get_object_or_404(WorkoutType, id=id)
+    def get(self, pk):
+        workout_type = get_object_or_404(WorkoutType, id=pk)
         serializer = WorkoutTypeSerializer(workout_type)
         return Response(serializer.data)

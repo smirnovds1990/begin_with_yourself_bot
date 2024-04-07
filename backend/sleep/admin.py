@@ -10,13 +10,11 @@ class SleepAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'sleep_time',
-        'wake_time',
         'is_sleeping',
         'client',
     )
-    list_filter = ('sleep_time', 'wake_time', 'client')
+    list_filter = ('sleep_time', 'client')
     search_fields = (
         'sleep_time',
-        'wake_time',
         'client',
     )

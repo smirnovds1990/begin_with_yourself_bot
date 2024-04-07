@@ -1,8 +1,8 @@
-from django.db import models
-from django.core.validators import MinValueValidator
-
 from profile.constants import (GENDER_CHOICES,
                                GOAL_CHOICES)
+
+from django.db import models
+from django.core.validators import MinValueValidator
 
 from .validators import validate_video_extension
 

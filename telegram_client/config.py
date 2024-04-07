@@ -7,10 +7,10 @@ from aiogram_forms import dispatcher as dpf
 from aiogram_forms import fields
 from dotenv import load_dotenv
 
-from constants import (ACTIVITIES, AIMS, MAX_HEIGHT_LENGTH, MAX_NAME_LENGTH,
+from .constants import (ACTIVITIES, AIMS, MAX_HEIGHT_LENGTH, MAX_NAME_LENGTH,
                        MAX_WEIGHT_LENGTH, MIN_LENGTH, SEXS, YEAR_LENGTH)
-from functions import compile_registration_data
-from validators import (validate_height, validate_name, validate_weight,
+from .functions import compile_registration_data
+from .validators import (validate_height, validate_name, validate_weight,
                         validate_year)
 
 load_dotenv()

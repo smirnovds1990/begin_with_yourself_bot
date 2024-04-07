@@ -8,6 +8,7 @@ disable=
     R0901, # Too many entities in file
     E1101, #  Dynamic attributes
     R0801, #  Too few public methods
+    E0307, #  __str__ does not return str (invalid-str-returned)
     
 
 ignore-paths=.*/migrations, backend/manage.py

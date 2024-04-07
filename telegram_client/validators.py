@@ -1,7 +1,8 @@
 import re
 
 from aiogram_forms.errors import ValidationError
-from constants import (DATE_PATTERN, HEIGHT_PATTERN, NAMES_PATTERN,
+
+from constants import (BIRTH_YEAR_PATTERN, HEIGHT_PATTERN, NAMES_PATTERN,
                        WIGHT_PATTERN)
 
 
@@ -23,8 +24,7 @@ async def validate_weight(value: str):
             'ERR_VAL_WEIGHT')
 
 
-async def validate_date(value: str):
-    if not re.match(DATE_PATTERN, value):
+async def validate_year(value: str):
+    if not re.match(BIRTH_YEAR_PATTERN, value):
         raise ValidationError(
-            'Введите дату в формате dd.mm.YYYY',
-            'ERR_VAL_DATE')
+            'Введите ваш год рождения в формате YYYY.', 'ERR_VAL_BY')

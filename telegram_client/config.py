@@ -1,16 +1,17 @@
 from os import getenv
 
 from aiogram import Bot, Dispatcher
-from aiogram.types import Message
+from aiogram.types import Message, User
 from aiogram_forms import Form, FormsManager
 from aiogram_forms import dispatcher as dpf
 from aiogram_forms import fields
-from constants import (DATE_LENGTH, MAX_HEIGHT_LENGTH, MAX_NAME_LENGTH,
-                       MAX_WEIGHT_LENGTH, MIN_LENGTH)
 from dotenv import load_dotenv
+
+from constants import (ACTIVITIES, AIMS, MAX_HEIGHT_LENGTH, MAX_NAME_LENGTH,
+                       MAX_WEIGHT_LENGTH, MIN_LENGTH, SEXS, YEAR_LENGTH)
 from functions import compile_registration_data
-from validators import (validate_date, validate_height, validate_name,
-                        validate_weight)
+from validators import (validate_height, validate_name, validate_weight,
+                        validate_year)
 
 load_dotenv()
 
@@ -19,7 +20,35 @@ BOT = Bot(TOKEN)
 DISPATCHER = Dispatcher()
 
 
-@dpf.register('registration')  # ФОРМЫ ТЕПЕРЬ ЗДЕСЬ
+@dpf.register('training')
+class TrainingForm(Form):
+    aim = fields.ChoiceField('Ваша цель', choices=AIMS)
+    activity = fields.ChoiceField(
+        'Наиболее подходящее описание вашего образа жизни',
+        choices=ACTIVITIES
+    )
+    current_weight = fields.TextField(
+        'Ваш текущий вес',
+        min_length=MIN_LENGTH,
+        max_length=MAX_WEIGHT_LENGTH,
+        validators=[validate_weight]
+    )
+
+    @classmethod
+    async def callback(
+         cls, message: Message,
+         forms: FormsManager,
+         **data):  # pylint: disable=arguments-differ
+        user: User = data['event_from_user']
+        form_data = await forms.get_data(TrainingForm)
+        form_data['tg_user_id'] = user.id
+        # ЗДЕСЬ PATCH ЗАПРОС В API Django
+        print(form_data)
+        #
+        await message.answer('Отлично! Я зафиксировал данные :)')
+
+
+@dpf.register('registration')
 class RegisterForm(Form):
     first_name = fields.TextField(
         'Ваше имя',
@@ -33,38 +62,19 @@ class RegisterForm(Form):
         max_length=MAX_NAME_LENGTH,
         validators=[validate_name]
     )
-    sex = fields.ChoiceField(
-        'Выберите пол',
-        choices=(
-            ('Мужской', 'М'),
-            ('Женский', 'Ж')
-        )
-    )
+    sex = fields.ChoiceField('Выберите пол', choices=SEXS)
     height = fields.TextField(
         'Рост, в см',
         min_length=MIN_LENGTH,
-        max_length=MAX_WEIGHT_LENGTH,
+        max_length=MAX_HEIGHT_LENGTH,
         validators=[validate_height]
     )
-    current_weight = fields.TextField(
-        'Ваш текущий вес',
-        min_length=MIN_LENGTH,
-        max_length=MAX_HEIGHT_LENGTH,
-        validators=[validate_weight]
+    birth_year = fields.TextField(
+        'Год рождения',
+        min_length=YEAR_LENGTH,
+        max_length=YEAR_LENGTH,
+        validators=[validate_year]
     )
-    birth_date = fields.TextField(
-        'Дата рождения',
-        min_length=DATE_LENGTH,
-        max_length=DATE_LENGTH,
-        validators=[validate_date]
-    )
-
-    @classmethod
-    async def attach_to(cls, my_disp):
-        '''
-        Функция, привязывающая FormDispatcher в Диспатчеру бота.
-        '''
-        await dpf.attach(my_disp)
 
     @classmethod
     async def callback(
@@ -74,10 +84,15 @@ class RegisterForm(Form):
         '''
         Функция, возвращающая ответ на заполненную форму.
         '''
+        user: User = data['event_from_user']
         form_data = await forms.get_data(RegisterForm)
-        print(await compile_registration_data(form_data))  # Для тестирования
+        form_data['tg_user_id'] = user.id
+        # ЗДЕСЬ ОТПРАВКА ПОСТ ЗАПРОСОВ В API Django
+        print(await compile_registration_data(form_data))
+        #
         await message.answer(
-            f'Спасибо за регистрацию, {form_data["first_name"]}!')
+            f'Поздравляю, {form_data["first_name"]}. Вы зарегистрированы!')
+        await forms.show('training')
 
 
 dpf.attach(DISPATCHER)

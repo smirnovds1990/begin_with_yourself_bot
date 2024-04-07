@@ -21,7 +21,7 @@ class WorkoutTypeList(APIView):
             type=openapi.TYPE_BOOLEAN
         )
     ])
-    def get(self, request, format=None):
+    def get(self, request):
         workout_types = WorkoutTypeFilter(
             request.GET,
             queryset=WorkoutType.objects.all()
@@ -35,7 +35,7 @@ class WorkoutTypeList(APIView):
         )
 
     @swagger_auto_schema(request_body=WorkoutTypeSerializer)
-    def post(self, request, format=None):
+    def post(self, request):
         serializer = WorkoutTypeSerializer(
             data=request.data
         )
@@ -53,7 +53,7 @@ class WorkoutTypeList(APIView):
 
 class WorkoutTypeDetail(APIView):
 
-    def get(self, request, id, format=None):
+    def get(self, id):
         workout_type = get_object_or_404(WorkoutType, id=id)
         serializer = WorkoutTypeSerializer(workout_type)
         return Response(serializer.data)

@@ -57,7 +57,7 @@ urlpatterns = [
         ),
         name='schema-redoc'
     ),
-    path('sleep/', include('sleep.urls')),
+    path('api/sleep/', include('sleep.urls')),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
 ]

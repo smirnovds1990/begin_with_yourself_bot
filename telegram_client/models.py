@@ -7,7 +7,7 @@ from .constants import MAX_NAME_LENGTH, TOKEN_LENGTH
 class Base(DeclarativeBase):
 
     @declared_attr
-    def __tablename__(cls):
+    def __tablename__(cls):  # pylint: disable=no-self-argument
         return cls.__name__.lower()
 
     id = Column(Integer, primary_key=True)

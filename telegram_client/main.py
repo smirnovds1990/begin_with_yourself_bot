@@ -1,26 +1,43 @@
 import asyncio
+from hashlib import sha256
 from random import choice
 
 from aiogram.filters.command import Command
-from aiogram.types import Message, User
+from aiogram.types import Message
 from aiogram_forms import FormsManager
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from sqlalchemy.ext.asyncio import async_sessionmaker
+from sqlalchemy import select
 
-from config import BOT, DISPATCHER
+from config import BOT, DISPATCHER, ENGINE
 from constants import NOTIFICATIONS
+from db import TgUser
+from functions import get_token
 
 
 @DISPATCHER.message(Command('start'))
 async def start_message(message: Message):
-    user: User = message.from_user
-    username = f'{user.id}'
-    print(username)  # Юзернейм для регистрации в API
-    await message.answer(
-        'Приветствую!\n'
-        'Здесь должно быть большое описание, '
-        'но пока в процессе разработки :)\n'
-        'Зарегистроваться: /register'
-    )
+    row = {
+        'username': f'{message.from_user.id}',
+        'password': sha256(f'{message.from_user.id}'.encode()).hexdigest()
+    }
+    async_session = async_sessionmaker(ENGINE, expire_on_commit=False)
+    query = select(TgUser).where(TgUser.tg_user_id == message.from_user.id)
+    async with async_session() as session:
+        user = (await session.scalars(query)).one_or_none()
+        if not user:
+            row['token'] = await get_token(row)
+            row['tg_user_id'] = message.from_user.id
+            session.add(TgUser(**row))
+            await session.commit()
+            await message.answer(
+                'Приветствую! Вы прошли начальную регистрацию.\n'
+                'Здесь должно быть большое описание, '
+                'но пока в процессе разработки :)\n'
+                'Зарегистроваться: /register'
+            )
+        else:
+            await message.answer('Вы уже прошли начальную регистрацию :)')
 
 
 @DISPATCHER.message(Command('register'))

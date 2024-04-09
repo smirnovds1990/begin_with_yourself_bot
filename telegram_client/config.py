@@ -6,6 +6,7 @@ from aiogram_forms import Form, FormsManager
 from aiogram_forms import dispatcher as dpf
 from aiogram_forms import fields
 from dotenv import load_dotenv
+from sqlalchemy.ext.asyncio import create_async_engine
 
 from constants import (ACTIVITIES, AIMS, MAX_HEIGHT_LENGTH, MAX_NAME_LENGTH,
                        MAX_WEIGHT_LENGTH, MIN_LENGTH, SEXS, YEAR_LENGTH)
@@ -18,6 +19,7 @@ load_dotenv()
 TOKEN = getenv('TOKEN')
 BOT = Bot(TOKEN)
 DISPATCHER = Dispatcher()
+ENGINE = create_async_engine(getenv('ENGINE'))
 
 
 @dpf.register('training')
@@ -50,13 +52,13 @@ class TrainingForm(Form):
 
 @dpf.register('registration')
 class RegisterForm(Form):
-    first_name = fields.TextField(
+    name = fields.TextField(
         'Ваше имя',
         min_length=MIN_LENGTH,
         max_length=MAX_NAME_LENGTH,
         validators=[validate_name],
     )
-    last_name = fields.TextField(
+    surname = fields.TextField(
         'Ваша фамилия',
         min_length=MIN_LENGTH,
         max_length=MAX_NAME_LENGTH,
@@ -69,7 +71,7 @@ class RegisterForm(Form):
         max_length=MAX_HEIGHT_LENGTH,
         validators=[validate_height]
     )
-    birth_year = fields.TextField(
+    birthdate = fields.TextField(
         'Год рождения',
         min_length=YEAR_LENGTH,
         max_length=YEAR_LENGTH,

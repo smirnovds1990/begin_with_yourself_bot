@@ -1,0 +1,66 @@
+[
+    {
+      "model": "workout.workouttype",
+      "pk": 1,
+      "fields": {
+        "title": "Тренировки на бицепс",
+        "description": "Упражнения для укрепления и развития мышц бицепса.",
+        "is_active": true
+      }
+    },
+    {
+      "model": "workout.workouttype",
+      "pk": 2,
+      "fields": {
+        "title": "Тренировки на ноги",
+        "description": "Упражнения для укрепления и развития мышц ног.",
+        "is_active": true
+      }
+    },
+    {
+      "model": "workout.workouttype",
+      "pk": 3,
+      "fields": {
+        "title": "Тренировки на кардио",
+        "description": "Упражнения для улучшения работы сердечно-сосудистой системы.",
+        "is_active": true
+      }
+    },
+    {
+      "model": "workout.workouttype",
+      "pk": 4,
+      "fields": {
+        "title": "Тренировки на спину",
+        "description": "Упражнения для укрепления и развития мышц спины.",
+        "is_active": true
+      }
+    },
+    {
+      "model": "workout.workouttype",
+      "pk": 5,
+      "fields": {
+        "title": "Тренировки на трицепс",
+        "description": "Упражнения для укрепления и развития мышц трицепса.",
+        "is_active": true
+      }
+    },
+    {
+      "model": "workout.workouttype",
+      "pk": 6,
+      "fields": {
+        "title": "Тренировки на плечи",
+        "description": "Упражнения для укрепления и развития мышц плеч.",
+        "is_active": true
+      }
+    },
+    {
+      "model": "workout.workouttype",
+      "pk": 7,
+      "fields": {
+        "title": "Тренировки на грудь",
+        "description": "Упражнения для укрепления и развития мышц груди.",
+        "is_active": true
+      }
+    }
+  ]
+  

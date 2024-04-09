@@ -60,3 +60,9 @@ cd backend/
 python manage.py migrate
 python manage.py runserver
 ```
+
+## Load fixtures
+
+```bash
+python manage.py loaddata workout_types.json
+```

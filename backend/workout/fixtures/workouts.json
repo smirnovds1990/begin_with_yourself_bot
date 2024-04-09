@@ -1,0 +1,143 @@
+[
+    {
+      "model": "workout.workout",
+      "pk": 1,
+      "fields": {
+        "title": "Подъем штанги на бицепс",
+        "workout_type": 1,
+        "description": "Классическое упражнение на бицепс, позволяющее работать над объемом и силой мышц.",
+        "video": null
+      }
+    },
+    {
+      "model": "workout.workout",
+      "pk": 2,
+      "fields": {
+        "title": "Молотковый подъем на бицепс",
+        "workout_type": 1,
+        "description": "Эффективное упражнение для проработки бицепса и предплечий.",
+        "video": null
+      }
+    },
+    {
+      "model": "workout.workout",
+      "pk": 3,
+      "fields": {
+        "title": "Приседания со штангой",
+        "workout_type": 2,
+        "description": "Основное упражнение для развития силы и массы нижней части тела.",
+        "video": null
+      }
+    },
+    {
+      "model": "workout.workout",
+      "pk": 4,
+      "fields": {
+        "title": "Выпады со штангой",
+        "workout_type": 2,
+        "description": "Упражнение для укрепления мышц ног и ягодиц.",
+        "video": null
+      }
+    },
+    {
+      "model": "workout.workout",
+      "pk": 5,
+      "fields": {
+        "title": "Бег на беговой дорожке",
+        "workout_type": 3,
+        "description": "Кардио упражнение, способствующее улучшению работы сердечно-сосудистой системы.",
+        "video": null
+      }
+    },
+    {
+      "model": "workout.workout",
+      "pk": 6,
+      "fields": {
+        "title": "Велосипед",
+        "workout_type": 3,
+        "description": "Эффективное кардио упражнение для сжигания калорий.",
+        "video": null
+      }
+    },
+    {
+      "model": "workout.workout",
+      "pk": 7,
+      "fields": {
+        "title": "Подтягивания",
+        "workout_type": 4,
+        "description": "Комплексное упражнение на верхнюю часть тела, укрепляющее спину и руки.",
+        "video": null
+      }
+    },
+    {
+      "model": "workout.workout",
+      "pk": 8,
+      "fields": {
+        "title": "Тяга штанги в наклоне",
+        "workout_type": 4,
+        "description": "Упражнение на широчайшие мышцы спины, улучшающее осанку.",
+        "video": null
+      }
+    },
+    {
+      "model": "workout.workout",
+      "pk": 9,
+      "fields": {
+        "title": "Французский жим",
+        "workout_type": 5,
+        "description": "Упражнение для трицепса, позволяющее работать над его формой и силой.",
+        "video": null
+      }
+    },
+    {
+      "model": "workout.workout",
+      "pk": 10,
+      "fields": {
+        "title": "Отжимания на брусьях",
+        "workout_type": 5,
+        "description": "Мощное упражнение для проработки трицепса и грудных мышц.",
+        "video": null
+      }
+    },
+    {
+      "model": "workout.workout",
+      "pk": 11,
+      "fields": {
+        "title": "Жим штанги стоя",
+        "workout_type": 6,
+        "description": "Базовое упражнение для укрепления плечевого пояса.",
+        "video": null
+      }
+    },
+    {
+      "model": "workout.workout",
+      "pk": 12,
+      "fields": {
+        "title": "Подъем гантелей через стороны",
+        "workout_type": 6,
+        "description": "Упражнение на дельтовидные мышцы, улучшающее форму и объем плеч.",
+        "video": null
+      }
+    },
+    {
+      "model": "workout.workout",
+      "pk": 13,
+      "fields": {
+        "title": "Жим штанги лежа",
+        "workout_type": 7,
+        "description": "Ключевое упражнение для развития грудных мышц.",
+        "video": null
+      }
+    },
+    {
+      "model": "workout.workout",
+      "pk": 14,
+      "fields": {
+        "title": "Разведение гантелей лежа",
+        "workout_type": 7,
+        "description": "Упражнение на грудные мышцы, способствующее их растяжению и укреплению.",
+        "video": null
+      }
+    }
+  ]
+  

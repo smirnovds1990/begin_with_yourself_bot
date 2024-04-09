@@ -32,7 +32,7 @@ class WorkoutType(models.Model):
     )
 
     def __str__(self):
-        return self.title
+        return str(self.title)
 
     class Meta:
         verbose_name = 'тип тренировки'
@@ -66,7 +66,7 @@ class Workout(models.Model):
     )
 
     def __str__(self):
-        return self.title
+        return str(self.title)
 
     class Meta:
         verbose_name = 'тренировка'

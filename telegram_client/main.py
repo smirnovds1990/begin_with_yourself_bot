@@ -6,8 +6,8 @@ from aiogram.filters.command import Command
 from aiogram.types import Message
 from aiogram_forms import FormsManager
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from sqlalchemy.ext.asyncio import async_sessionmaker
 from sqlalchemy import select
+from sqlalchemy.ext.asyncio import async_sessionmaker
 
 from config import BOT, DISPATCHER, ENGINE
 from constants import NOTIFICATIONS

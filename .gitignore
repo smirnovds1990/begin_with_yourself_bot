@@ -162,6 +162,3 @@ cython_debug/
 
 # Media
 media/
-
-# Static
-static/

@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import include, path
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -11,9 +13,9 @@ router.register('sleep', SleepViewSet)
 
 schema_view = get_schema_view(
     openapi.Info(
-        title='"Begin with yourself" API',
+        title='"Начни с себя" API',
         default_version='v1',
-        description='Documentation for the project "Begin with yourself"',
+        description='Документация для проекта "Начни с себя"',
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),
@@ -25,12 +27,12 @@ urlpatterns = [
         admin.site.urls
     ),
     path(
-        'api/',
-        include(router.urls)
-    ),
-    path(
         'nutrition/',
         include('nutrition.urls')
+    ),
+    path(
+        'workout/',
+        include('workout.urls')
     ),
     path(
         'swagger<format>/',
@@ -59,3 +61,5 @@ urlpatterns = [
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

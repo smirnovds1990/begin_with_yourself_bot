@@ -64,4 +64,9 @@ run migrations for tg_bot database:
 ```bash
 cd telegram_client/
 alembic upgrade head
+
+## Load fixtures
+
+```bash
+python manage.py loaddata workout_types.json
 ```

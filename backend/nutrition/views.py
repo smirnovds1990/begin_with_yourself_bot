@@ -28,7 +28,7 @@ class CalorieNormView(APIView):
             (gender_factors['age'] * age)
         )
 
-        activity_modifier = ACTIVITY_MODIFIERS[profile.activity]
+        activity_modifier = ACTIVITY_MODIFIERS[profile.activity_level]
         goal_modifier = GOAL_MODIFIERS[profile.goal]
 
         calories *= activity_modifier

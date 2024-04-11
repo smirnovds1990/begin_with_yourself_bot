@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 from constants import (ACTIVITY_CHOICES, AIM_CHOICES, MAX_HEIGHT_LENGTH,
                        MAX_NAME_LENGTH, MAX_WEIGHT_LENGTH, MIN_LENGTH,
                        SEX_CHOICES, YEAR_LENGTH)
-from functions import compile_registration_data, get_token, reversed
+from functions import compile_registration_data, get_token, reverse_choices
 from validators import (validate_height, validate_name, validate_weight,
                         validate_year)
 
@@ -23,10 +23,11 @@ DISPATCHER = Dispatcher()
 
 @dpf.register('training')
 class TrainingForm(Form):
-    aim = fields.ChoiceField('Ваша цель', choices=reversed(AIM_CHOICES))
+    aim = fields.ChoiceField(
+        'Ваша цель', choices=reverse_choices(AIM_CHOICES))
     activity = fields.ChoiceField(
         'Наиболее подходящее описание вашего образа жизни',
-        choices=reversed(ACTIVITY_CHOICES)
+        choices=reverse_choices(ACTIVITY_CHOICES)
     )
     current_weight = fields.TextField(
         'Ваш текущий вес',

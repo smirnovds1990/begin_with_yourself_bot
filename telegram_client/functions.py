@@ -6,8 +6,8 @@ from constants import LOGIN_URL, TOKEN_URL
 from db import ENGINE, TgUser
 
 
-def reversed(choises: tuple) -> tuple:
-    return [choice[::-1] for choice in choises]
+def reverse_choices(choices: tuple) -> tuple:
+    return [choice[::-1] for choice in choices]
 
 
 async def create_token(user_data: dict):

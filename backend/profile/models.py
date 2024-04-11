@@ -1,9 +1,11 @@
+from workout.models import WorkoutProgram
+
 from django.db import models
 from django.contrib.auth.models import User
 
-from .constants import (GENDER_CHOICES,
+from .constants import (SEX_CHOICES,
                         ACTIVITY_CHOICES,
-                        GOAL_CHOICES)
+                        AIM_CHOICES)
 
 
 class UserProfile(models.Model):
@@ -12,26 +14,26 @@ class UserProfile(models.Model):
         on_delete=models.CASCADE,
         verbose_name="Пользователь"
     )
-    gender = models.CharField(
+    sex = models.CharField(
         max_length=1,
-        choices=GENDER_CHOICES,
+        choices=SEX_CHOICES,
         verbose_name='Пол'
     )
-    current_weight = models.PositiveIntegerField(
+    current_weight = models.FloatField(
         verbose_name='Текущий вес (кг.)'
     )
     height = models.PositiveIntegerField(
         verbose_name='Рост (см.)'
     )
-    year_of_birth = models.PositiveIntegerField(
+    birthdate = models.PositiveIntegerField(
         verbose_name='Год рождения'
     )
-    goal = models.CharField(
+    aim = models.CharField(
         max_length=10,
-        choices=GOAL_CHOICES,
+        choices=AIM_CHOICES,
         verbose_name='Цель'
     )
-    activity_level = models.CharField(
+    activity = models.CharField(
         max_length=20,
         choices=ACTIVITY_CHOICES,
         verbose_name='Активность'

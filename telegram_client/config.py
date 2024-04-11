@@ -5,9 +5,10 @@ from aiogram.types import Message, User
 from aiogram_forms import Form, FormsManager
 from aiogram_forms import dispatcher as dpf
 from aiogram_forms import fields
+from dotenv import load_dotenv
+
 from backend.profile.constants import (ACTIVITY_CHOICES, AIM_CHOICES,
                                        SEX_CHOICES)
-from dotenv import load_dotenv
 
 from .constants import (MAX_HEIGHT_LENGTH, MAX_NAME_LENGTH, MAX_WEIGHT_LENGTH,
                         MIN_LENGTH, YEAR_LENGTH)

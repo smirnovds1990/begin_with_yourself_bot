@@ -2,7 +2,7 @@ import requests as re
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import async_sessionmaker
 
-from .constants import LOGIN_URL, TOKEN_URL, PROFILE_URL
+from .constants import LOGIN_URL, PROFILE_URL, TOKEN_URL
 from .db import ENGINE, TelegramUser
 
 
@@ -19,7 +19,7 @@ async def get_profile(token: str):
     headers = {
         'Authorization': f'Bearer {token}'
     }
-    return re.get(PROFILE_URL, headers=headers).json()
+    return re.get(PROFILE_URL, headers=headers, timeout=5).json()
 
 
 async def get_token(user_id: int):

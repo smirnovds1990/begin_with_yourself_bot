@@ -2,8 +2,8 @@ import re
 
 from aiogram_forms.errors import ValidationError
 
-from constants import (BIRTH_YEAR_PATTERN, HEIGHT_PATTERN, NAMES_PATTERN,
-                       WIGHT_PATTERN)
+from .constants import (BIRTH_YEAR_PATTERN, HEIGHT_PATTERN, NAMES_PATTERN,
+                        WIGHT_PATTERN)
 
 
 async def validate_name(value: str):

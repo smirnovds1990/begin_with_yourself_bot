@@ -10,7 +10,8 @@ class UserProfile(models.Model):
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
-        verbose_name="Пользователь"
+        verbose_name="Пользователь",
+        primary_key=True
     )
     sex = models.CharField(
         max_length=1,
@@ -34,7 +35,8 @@ class UserProfile(models.Model):
     activity = models.CharField(
         max_length=20,
         choices=ACTIVITY_CHOICES,
-        verbose_name='Активность'
+        verbose_name='Активность',
+        null=True
     )
 
     class Meta:

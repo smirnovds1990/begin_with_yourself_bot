@@ -1,6 +1,7 @@
 version: '3.8'
 volumes:
   pg_data:
+  tg_pg_data:
 services:
   db:
     image: postgres:16.2-alpine
@@ -10,3 +11,11 @@ services:
       - pg_data:/var/lib/postgresql/data
     ports:
       - '5432:5432'
+  telegram_db:
+    image: postgres:16.2-alpine
+    env_file:
+      - telegram_client/.env
+    volumes:
+      - tg_pg_data:/var/lib/postgresql/data
+    ports:
+      - '5433:5432'

@@ -6,8 +6,8 @@ from aiogram.types import Message, User
 from aiogram_forms import FormsManager
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-from config import BOT, DISPATCHER
-from constants import NOTIFICATIONS
+from telegram_client.config import BOT, DISPATCHER
+from telegram_client.constants import NOTIFICATIONS
 
 
 @DISPATCHER.message(Command('start'))

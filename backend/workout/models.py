@@ -1,5 +1,5 @@
-from profile.constants import (GENDER_CHOICES,
-                               GOAL_CHOICES)
+from profile.constants import (SEX_CHOICES,
+                               AIM_CHOICES)
 
 from django.db import models
 from django.core.validators import MinValueValidator
@@ -79,24 +79,25 @@ class WorkoutProgram(models.Model):
     ориентированных на определенный пол и цель.
     Каждая программа уникальна по комбинации пола и цели.
     """
-    gender = models.CharField(
+    sex = models.CharField(
         max_length=1,
-        choices=GENDER_CHOICES,
+        choices=SEX_CHOICES,
         verbose_name='Пол'
     )
-    goal = models.CharField(
+    aim = models.CharField(
         max_length=10,
-        choices=GOAL_CHOICES,
+        choices=AIM_CHOICES,
         verbose_name='Цель'
     )
 
     def __str__(self):
-        return f"{self.get_gender_display()} - {self.get_goal_display()}"
+        return (f'Программа тренировок - Пол: {self.get_sex_display()}, '
+                f'Цель: {self.get_aim_display()}')
 
     class Meta:
         verbose_name = 'программа тренировок'
         verbose_name_plural = 'программы тренировок'
-        unique_together = ('gender', 'goal')
+        unique_together = ('sex', 'aim')
 
 
 class WorkoutProgramDetail(models.Model):
@@ -131,6 +132,7 @@ class WorkoutProgramDetail(models.Model):
         null=True
     )
     duration = models.PositiveIntegerField(
+        default=0,
         blank=True,
         null=True,
         verbose_name='Продолжительность (мин.)',

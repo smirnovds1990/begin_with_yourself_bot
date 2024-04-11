@@ -8,11 +8,11 @@ class UserProfileAdmin(admin.ModelAdmin):
         'name',
         'surname',
         'sex',
-        'aim',
         'current_weight',
         'height',
         'birthdate',
-        'activity',
+        'aim',
+        'activity'
     )
     search_fields = (
         'user__username',

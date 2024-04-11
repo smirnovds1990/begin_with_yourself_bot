@@ -1,12 +1,14 @@
 from django.shortcuts import get_object_or_404
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework import status
-from .models import WorkoutType
-from .serializers import WorkoutTypeSerializer
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from profile.models import UserProfile
+from .models import WorkoutType, WorkoutProgram
+from .serializers import WorkoutTypeSerializer, WorkoutProgramSerializer
 from .filters import WorkoutTypeFilter
 
 
@@ -57,3 +59,25 @@ class WorkoutTypeDetail(APIView):
         workout_type = get_object_or_404(WorkoutType, id=pk)
         serializer = WorkoutTypeSerializer(workout_type)
         return Response(serializer.data)
+
+
+class UserWorkoutProgramView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user_profile = get_object_or_404(
+            UserProfile,
+            user=request.user
+        )
+        workout_program = get_object_or_404(
+            WorkoutProgram,
+            sex=user_profile.sex,
+            aim=user_profile.aim
+        )
+        serializer = WorkoutProgramSerializer(
+            workout_program
+        )
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK
+        )

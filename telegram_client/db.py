@@ -1,10 +1,14 @@
 import asyncio
+from os import getenv
 
+from dotenv import load_dotenv
 from sqlalchemy import Column, Integer, String
+from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import declarative_base
 
-from config import ENGINE
+load_dotenv()
 
+ENGINE = create_async_engine(getenv('ENGINE'))
 Base = declarative_base()
 
 

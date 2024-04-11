@@ -9,10 +9,10 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import async_sessionmaker
 
-from config import BOT, DISPATCHER, ENGINE
+from config import BOT, DISPATCHER
 from constants import NOTIFICATIONS
-from db import TgUser
-from functions import get_token
+from db import ENGINE, TgUser
+from functions import create_token
 
 
 @DISPATCHER.message(Command('start'))
@@ -24,9 +24,8 @@ async def start_message(message: Message):
     async_session = async_sessionmaker(ENGINE, expire_on_commit=False)
     query = select(TgUser).where(TgUser.tg_user_id == message.from_user.id)
     async with async_session() as session:
-        user = (await session.scalars(query)).one_or_none()
-        if not user:
-            row['token'] = await get_token(row)
+        if not (await session.scalars(query)).one_or_none():
+            row['token'] = await create_token(row)
             row['tg_user_id'] = message.from_user.id
             session.add(TgUser(**row))
             await session.commit()

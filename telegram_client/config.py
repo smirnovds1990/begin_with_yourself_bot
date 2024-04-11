@@ -6,11 +6,11 @@ from aiogram_forms import Form, FormsManager
 from aiogram_forms import dispatcher as dpf
 from aiogram_forms import fields
 from dotenv import load_dotenv
-from sqlalchemy.ext.asyncio import create_async_engine
 
-from constants import (ACTIVITIES, AIMS, MAX_HEIGHT_LENGTH, MAX_NAME_LENGTH,
-                       MAX_WEIGHT_LENGTH, MIN_LENGTH, SEXS, YEAR_LENGTH)
-from functions import compile_registration_data
+from constants import (ACTIVITY_CHOICES, AIM_CHOICES, MAX_HEIGHT_LENGTH,
+                       MAX_NAME_LENGTH, MAX_WEIGHT_LENGTH, MIN_LENGTH,
+                       SEX_CHOICES, YEAR_LENGTH)
+from functions import compile_registration_data, get_token, reversed
 from validators import (validate_height, validate_name, validate_weight,
                         validate_year)
 
@@ -19,15 +19,14 @@ load_dotenv()
 TOKEN = getenv('TOKEN')
 BOT = Bot(TOKEN)
 DISPATCHER = Dispatcher()
-ENGINE = create_async_engine(getenv('ENGINE'))
 
 
 @dpf.register('training')
 class TrainingForm(Form):
-    aim = fields.ChoiceField('Ваша цель', choices=AIMS)
+    aim = fields.ChoiceField('Ваша цель', choices=reversed(AIM_CHOICES))
     activity = fields.ChoiceField(
         'Наиболее подходящее описание вашего образа жизни',
-        choices=ACTIVITIES
+        choices=reversed(ACTIVITY_CHOICES)
     )
     current_weight = fields.TextField(
         'Ваш текущий вес',
@@ -44,7 +43,7 @@ class TrainingForm(Form):
         user: User = data['event_from_user']
         form_data = await forms.get_data(TrainingForm)
         form_data['tg_user_id'] = user.id
-        # ЗДЕСЬ PATCH ЗАПРОС В API Django
+        print(await get_token(message.from_user.id))
         print(form_data)
         #
         await message.answer('Отлично! Я зафиксировал данные :)')
@@ -64,7 +63,10 @@ class RegisterForm(Form):
         max_length=MAX_NAME_LENGTH,
         validators=[validate_name]
     )
-    sex = fields.ChoiceField('Выберите пол', choices=SEXS)
+    sex = fields.ChoiceField(
+        'Выберите пол',
+        choices=reversed(SEX_CHOICES)
+    )
     height = fields.TextField(
         'Рост, в см',
         min_length=MIN_LENGTH,
@@ -90,10 +92,11 @@ class RegisterForm(Form):
         form_data = await forms.get_data(RegisterForm)
         form_data['tg_user_id'] = user.id
         # ЗДЕСЬ ОТПРАВКА ПОСТ ЗАПРОСОВ В API Django
+        print(await get_token(message.from_user.id))
         print(await compile_registration_data(form_data))
         #
         await message.answer(
-            f'Поздравляю, {form_data["first_name"]}. Вы зарегистрированы!')
+            f'Поздравляю, {form_data["name"]}. Вы зарегистрированы!')
         await forms.show('training')
 
 

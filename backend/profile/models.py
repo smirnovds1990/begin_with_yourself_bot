@@ -13,6 +13,14 @@ class UserProfile(models.Model):
         verbose_name="Пользователь",
         primary_key=True
     )
+    name = models.CharField(
+        max_length=100,
+        verbose_name='Имя пользователя'
+    )
+    surname = models.CharField(
+        max_length=150,
+        verbose_name='Фамилия'
+    )
     sex = models.CharField(
         max_length=1,
         choices=SEX_CHOICES,

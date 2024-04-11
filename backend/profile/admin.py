@@ -5,6 +5,8 @@ from .models import UserProfile
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = (
         'user',
+        'name',
+        'surname',
         'sex',
         'current_weight',
         'height',
@@ -14,7 +16,6 @@ class UserProfileAdmin(admin.ModelAdmin):
     )
     search_fields = (
         'user__username',
-        'user__email',
         'sex',
         'aim',
         'activity'

@@ -9,10 +9,10 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import async_sessionmaker
 
-from config import BOT, DISPATCHER
-from constants import NOTIFICATIONS
-from db import ENGINE, TgUser
-from functions import create_token
+from telegram_client.config import BOT, DISPATCHER
+from telegram_client.constants import NOTIFICATIONS
+from telegram_client.db import ENGINE, TelegramUser
+from telegram_client.functions import create_token, get_profile
 
 
 @DISPATCHER.message(Command('start'))
@@ -22,12 +22,13 @@ async def start_message(message: Message):
         'password': sha256(f'{message.from_user.id}'.encode()).hexdigest()
     }
     async_session = async_sessionmaker(ENGINE, expire_on_commit=False)
-    query = select(TgUser).where(TgUser.tg_user_id == message.from_user.id)
+    query = select(TelegramUser).where(
+        TelegramUser.tg_user_id == message.from_user.id)
     async with async_session() as session:
         if not (await session.scalars(query)).one_or_none():
             row['token'] = await create_token(row)
             row['tg_user_id'] = message.from_user.id
-            session.add(TgUser(**row))
+            session.add(TelegramUser(**row))
             await session.commit()
             await message.answer(
                 'Приветствую! Вы прошли начальную регистрацию.\n'
@@ -52,10 +53,32 @@ async def test(chat_id: int):
     await BOT.send_message(chat_id, choice(NOTIFICATIONS))
 
 
+async def test_2(user: TelegramUser):
+    '''
+    Тестовая функция для отправки индивидуальных сообщений ботом.
+    '''
+    # ЗАГЛУШКА. PROFILE НЕТ. БЕРЕМ USERNAME ИЗ AUTH
+    name = (await get_profile(user.token))['username']
+    #
+    message = f'Вам, {name}, пора позаниматься!'
+    await BOT.send_message(user.tg_user_id, message)
+
+
 async def main():
-    # В РАМКАХ ТЕСТОВ ИСПОЛЬЗУЕТСЯ МОЙ CHAT_ID
+    # ТЕСТИРОВАНИЕ ШЕДУЛЕРА
     scheduler = AsyncIOScheduler()
+    async with async_sessionmaker(ENGINE, expire_on_commit=False)() as session:
+        users = (await session.scalars(select(TelegramUser))).all()
+    # ОТПРАВКА СООБЩЕНИЯ РАЗ В ЧАС
     scheduler.add_job(test, 'interval', hours=1, args=(117508330,))
+    # ОТПРАВКА ВСЕМ ПОЛЬЗОВАТЕЛЯМ РАЗ В 2 ЧАСА РАЗНЫХ СООБЩЕНИЙ
+    for user in users:
+        scheduler.add_job(
+            test_2,
+            'interval',
+            hours=2,
+            args=(user, )
+        )
     scheduler.start()
     #
     await DISPATCHER.start_polling(BOT)

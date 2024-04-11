@@ -6,16 +6,17 @@ from .models import UserProfile
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = (
         'user',
+        'name',
+        'surname',
         'sex',
+        'aim',
         'current_weight',
         'height',
         'birthdate',
-        'aim',
-        'activity'
+        'activity',
     )
     search_fields = (
         'user__username',
-        'user__email',
         'sex',
         'aim',
         'activity'

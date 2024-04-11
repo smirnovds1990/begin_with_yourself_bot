@@ -5,14 +5,15 @@ from aiogram.types import Message, User
 from aiogram_forms import Form, FormsManager
 from aiogram_forms import dispatcher as dpf
 from aiogram_forms import fields
+from backend.profile.constants import (ACTIVITY_CHOICES, AIM_CHOICES,
+                                       SEX_CHOICES)
 from dotenv import load_dotenv
 
-from constants import (ACTIVITY_CHOICES, AIM_CHOICES, MAX_HEIGHT_LENGTH,
-                       MAX_NAME_LENGTH, MAX_WEIGHT_LENGTH, MIN_LENGTH,
-                       SEX_CHOICES, YEAR_LENGTH)
-from functions import compile_registration_data, get_token, reverse_choices
-from validators import (validate_height, validate_name, validate_weight,
-                        validate_year)
+from .constants import (MAX_HEIGHT_LENGTH, MAX_NAME_LENGTH, MAX_WEIGHT_LENGTH,
+                        MIN_LENGTH, YEAR_LENGTH)
+from .functions import compile_registration_data, get_token, reverse_choices
+from .validators import (validate_height, validate_name, validate_weight,
+                         validate_year)
 
 load_dotenv()
 
@@ -38,9 +39,9 @@ class TrainingForm(Form):
 
     @classmethod
     async def callback(
-         cls, message: Message,
-         forms: FormsManager,
-         **data):  # pylint: disable=arguments-differ
+            cls, message: Message,
+            forms: FormsManager,
+            **data):  # pylint: disable=arguments-differ
         user: User = data['event_from_user']
         form_data = await forms.get_data(TrainingForm)
         form_data['tg_user_id'] = user.id
@@ -83,9 +84,9 @@ class RegisterForm(Form):
 
     @classmethod
     async def callback(
-         cls, message: Message,
-         forms: FormsManager,
-         **data):  # pylint: disable=arguments-differ
+            cls, message: Message,
+            forms: FormsManager,
+            **data):  # pylint: disable=arguments-differ
         '''
         Функция, возвращающая ответ на заполненную форму.
         '''

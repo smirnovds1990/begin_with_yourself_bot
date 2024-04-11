@@ -9,14 +9,30 @@ from .constants import (SEX_CHOICES,
 class UserProfile(models.Model):
     user = models.OneToOneField(
         User,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        verbose_name="Пользователь",
+        primary_key=True
+    )
+    name = models.CharField(
+        max_length=100,
+        verbose_name='Имя пользователя'
+    )
+    surname = models.CharField(
+        max_length=150,
+        verbose_name='Фамилия'
     )
     sex = models.CharField(
-        max_length=1,
+        max_length=15,
         choices=SEX_CHOICES,
         verbose_name='Пол'
     )
-    current_weight = models.FloatField(
+    aim = models.CharField(
+        max_length=25,
+        choices=AIM_CHOICES,
+        verbose_name='Цель',
+        null=True
+    )
+    current_weight = models.PositiveIntegerField(
         verbose_name='Текущий вес (кг.)'
     )
     height = models.PositiveIntegerField(
@@ -25,13 +41,16 @@ class UserProfile(models.Model):
     birthdate = models.PositiveIntegerField(
         verbose_name='Год рождения'
     )
-    aim = models.CharField(
-        max_length=10,
-        choices=AIM_CHOICES,
-        verbose_name='Цель'
-    )
     activity = models.CharField(
-        max_length=20,
+        max_length=100,
         choices=ACTIVITY_CHOICES,
-        verbose_name='Активность'
+        verbose_name='Активность',
+        null=True
     )
+
+    class Meta:
+        verbose_name = 'профиль пользователя'
+        verbose_name_plural = 'Профили пользователей'
+
+    def __str__(self):
+        return f"Профиль пользователя {self.user.username}"

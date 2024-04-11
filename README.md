@@ -37,14 +37,14 @@ python manage.py runserver
 ## Run telegram_client
 
 ```bash
-cd telegram_client/
+cd ~/Dev/begin_with_yourself_bot_3/
 python main.py
 ```
 
 ## Run linter
 
 ```bash
-cd ~/Dev/begin_with_yourself_bot_3
+cd ~/Dev/begin_with_yourself_bot_3/
 pylint $(git ls-files '*.py')
 ```
 
@@ -59,4 +59,14 @@ in a separate terminal:
 cd backend/
 python manage.py migrate
 python manage.py runserver
+```
+run migrations for tg_bot database:
+```bash
+cd telegram_client/
+alembic upgrade head
+
+## Load fixtures
+
+```bash
+python manage.py loaddata workout_types.json
 ```

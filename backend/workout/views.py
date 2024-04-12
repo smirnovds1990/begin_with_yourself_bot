@@ -95,7 +95,7 @@ class BaseUserWorkoutProgramView(APIView):
 
 
 class UserWorkoutProgramView(BaseUserWorkoutProgramView):
-    def get(self, request, *args, **kwargs):
+    def get(self, request, **kwargs):
         '''
         Получение текущей программы тренировок с упражнениями.
         В сериализаторе указан отбор только упражнений

@@ -91,7 +91,8 @@ class WorkoutProgram(models.Model):
     )
 
     def __str__(self):
-        return f"{self.get_gender_display()} - {self.get_goal_display()}"
+        return (f'Программа тренировок - Пол: {self.get_sex_display()}, '
+                f'Цель: {self.get_aim_display()}')
 
     class Meta:
         verbose_name = 'программа тренировок'
@@ -131,6 +132,7 @@ class WorkoutProgramDetail(models.Model):
         null=True
     )
     duration = models.PositiveIntegerField(
+        default=0,
         blank=True,
         null=True,
         verbose_name='Продолжительность (мин.)',

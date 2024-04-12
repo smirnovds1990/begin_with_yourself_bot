@@ -22,17 +22,11 @@ class UserProfile(models.Model):
         verbose_name='Фамилия'
     )
     sex = models.CharField(
-        max_length=15,
+        max_length=1,
         choices=SEX_CHOICES,
         verbose_name='Пол'
     )
-    aim = models.CharField(
-        max_length=25,
-        choices=AIM_CHOICES,
-        verbose_name='Цель',
-        null=True
-    )
-    current_weight = models.PositiveIntegerField(
+    current_weight = models.FloatField(
         verbose_name='Текущий вес (кг.)'
     )
     height = models.PositiveIntegerField(
@@ -41,8 +35,13 @@ class UserProfile(models.Model):
     birthdate = models.PositiveIntegerField(
         verbose_name='Год рождения'
     )
+    aim = models.CharField(
+        max_length=10,
+        choices=AIM_CHOICES,
+        verbose_name='Цель'
+    )
     activity = models.CharField(
-        max_length=100,
+        max_length=20,
         choices=ACTIVITY_CHOICES,
         verbose_name='Активность',
         null=True

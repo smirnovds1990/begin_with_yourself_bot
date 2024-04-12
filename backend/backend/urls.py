@@ -31,7 +31,7 @@ urlpatterns = [
         include('nutrition.urls')
     ),
     path(
-        'workout/',
+        'api/workouts/',
         include('workout.urls')
     ),
     path(

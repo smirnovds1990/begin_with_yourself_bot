@@ -7,11 +7,9 @@ from aiogram_forms import dispatcher as dpf
 from aiogram_forms import fields
 from dotenv import load_dotenv
 
-from backend.profile.constants import (ACTIVITY_CHOICES, AIM_CHOICES,
-                                       SEX_CHOICES)
-
-from .constants import (MAX_HEIGHT_LENGTH, MAX_NAME_LENGTH, MAX_WEIGHT_LENGTH,
-                        MIN_LENGTH, YEAR_LENGTH)
+from .constants import (ACTIVITY_CHOICES, AIM_CHOICES, MAX_HEIGHT_LENGTH,
+                        MAX_NAME_LENGTH, MAX_WEIGHT_LENGTH, MIN_LENGTH,
+                        SEX_CHOICES, YEAR_LENGTH)
 from .functions import compile_registration_data, get_token, reverse_choices
 from .validators import (validate_height, validate_name, validate_weight,
                          validate_year)

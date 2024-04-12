@@ -27,7 +27,7 @@ urlpatterns = [
         admin.site.urls
     ),
     path(
-        'nutrition/',
+        'api/nutrition/',
         include('nutrition.urls')
     ),
     path(

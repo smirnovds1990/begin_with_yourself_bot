@@ -58,8 +58,8 @@ urlpatterns = [
         name='schema-redoc'
     ),
     path('api/sleep/', include('sleep.urls')),
+    path('profile/', include('profile.urls')),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
 ]
-
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

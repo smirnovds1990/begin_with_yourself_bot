@@ -2,6 +2,7 @@ version: '3.8'
 volumes:
   pg_data:
   tg_pg_data:
+  static:
 services:
   db:
     image: postgres:16.2-alpine
@@ -19,3 +20,21 @@ services:
       - tg_pg_data:/var/lib/postgresql/data
     ports:
       - '5433:5432'
+  backend:
+    build: 
+      context: .
+      dockerfile: backend/Dockerfile
+    env_file:
+      - backend/.env
+    volumes:
+      - static:/backend_static
+    depends_on:
+      - db
+  nginx:
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    volumes:
+      - static:/staticfiles/
+    ports:
+      - 8000:8000

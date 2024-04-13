@@ -7,7 +7,7 @@ from .db import ENGINE, TelegramUser
 
 
 def reverse_choices(choices: tuple) -> tuple:
-    return [choice[::-1] for choice in choices]
+    return tuple((choice[::-1] for choice in choices))
 
 
 async def create_token(user_data: dict):

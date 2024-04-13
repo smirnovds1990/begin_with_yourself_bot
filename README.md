@@ -60,8 +60,7 @@ docker compose exec backend python manage.py collectstatic
 docker compose exec backend cp -r /backend/collected_static/. /backend_static/static/
 ```
 ```bash
-cd backend/
-python manage.py migrate
+docker compose exec -it backend python manage.py migrate
 ```
 Go to http://localhost:8000/
 

@@ -27,11 +27,11 @@ urlpatterns = [
         admin.site.urls
     ),
     path(
-        'nutrition/',
+        'api/nutrition/',
         include('nutrition.urls')
     ),
     path(
-        'workout/',
+        'api/workouts/',
         include('workout.urls')
     ),
     path(

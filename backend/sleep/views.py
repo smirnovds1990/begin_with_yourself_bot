@@ -1,4 +1,4 @@
-from rest_framework import status, viewsets
+from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.mixins import CreateModelMixin, ListModelMixin
 from rest_framework.response import Response
@@ -16,6 +16,8 @@ class ListCreateViewSet(
 
 
 class SleepViewSet(ListCreateViewSet):
+    """Вьюсет создания сна."""
+
     queryset = Sleep.objects.all()
     serializer_class = SleepSerializer
 
@@ -27,13 +29,11 @@ class SleepViewSet(ListCreateViewSet):
 
 @api_view(['GET'])
 def get_last_sleep(request):
-    sleep_result = Sleep.sleeping_hours(request.user)
-    if isinstance(sleep_result, str):
-        return Response({'Result': sleep_result}, status.HTTP_404_NOT_FOUND)
+    """Получает результат последнего сна пользователя."""
+    sleeping_hours, sleep_status = Sleep.sleeping_hours(request.user)
     return Response(
         {
-            'sleeping_hours': sleep_result,
-            'sleep_quality': Sleep.sleep_quality(sleep_result),
+            'sleeping_hours': sleeping_hours,
+            'sleep_status': sleep_status,
         },
-        status=status.HTTP_200_OK,
     )

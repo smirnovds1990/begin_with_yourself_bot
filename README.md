@@ -56,10 +56,14 @@ docker compose up
 ```
 in a separate terminal:
 ```bash
-cd backend/
-python manage.py migrate
-python manage.py runserver
+docker compose exec backend python manage.py collectstatic
+docker compose exec backend cp -r /backend/collected_static/. /backend_static/static/
 ```
+```bash
+docker compose exec -it backend python manage.py migrate
+```
+Go to http://localhost:8000/
+
 run migrations for tg_bot database:
 ```bash
 cd telegram_client/

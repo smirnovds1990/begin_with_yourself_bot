@@ -2,6 +2,7 @@ version: '3.8'
 volumes:
   pg_data:
   tg_pg_data:
+  static:
 services:
   db:
     image: postgres:16.2-alpine
@@ -11,6 +12,11 @@ services:
       - pg_data:/var/lib/postgresql/data
     ports:
       - '5432:5432'
+    healthcheck:
+      test: ["CMD", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   telegram_db:
     image: postgres:16.2-alpine
     env_file:
@@ -19,3 +25,24 @@ services:
       - tg_pg_data:/var/lib/postgresql/data
     ports:
       - '5433:5432'
+  backend:
+    build: 
+      context: .
+      dockerfile: backend/Dockerfile
+    env_file:
+      - backend/.env
+    volumes:
+      - static:/backend_static
+    depends_on:
+      db:
+        condition: service_healthy
+  nginx:
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    volumes:
+      - static:/staticfiles/
+    ports:
+      - 8000:8000
+    depends_on:
+      - backend

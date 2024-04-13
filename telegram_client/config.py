@@ -1,7 +1,7 @@
 from os import getenv
 
 from aiogram import Bot, Dispatcher
-from aiogram.types import Message, User
+from aiogram.types import Message
 from aiogram_forms import Form, FormsManager
 from aiogram_forms import dispatcher as dpf
 from aiogram_forms import fields
@@ -41,9 +41,7 @@ class TrainingForm(Form):
             cls, message: Message,
             forms: FormsManager,
             **data):  # pylint: disable=arguments-differ
-        user: User = data['event_from_user']
         form_data = await forms.get_data(TrainingForm)
-        form_data['tg_user_id'] = user.id
         print(await get_token(message.from_user.id))
         print(form_data)
         #
@@ -66,7 +64,7 @@ class RegisterForm(Form):
     )
     sex = fields.ChoiceField(
         'Выберите пол',
-        choices=reversed(SEX_CHOICES)
+        choices=reverse_choices(SEX_CHOICES)
     )
     height = fields.TextField(
         'Рост, в см',
@@ -89,10 +87,7 @@ class RegisterForm(Form):
         '''
         Функция, возвращающая ответ на заполненную форму.
         '''
-        user: User = data['event_from_user']
         form_data = await forms.get_data(RegisterForm)
-        form_data['tg_user_id'] = user.id
-        # ЗДЕСЬ ОТПРАВКА ПОСТ ЗАПРОСОВ В API Django
         print(await get_token(message.from_user.id))
         print(await compile_registration_data(form_data))
         #

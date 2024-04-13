@@ -66,7 +66,7 @@ class RegisterForm(Form):
     )
     sex = fields.ChoiceField(
         'Выберите пол',
-        choices=reversed(SEX_CHOICES)
+        choices=reverse_choices(SEX_CHOICES)
     )
     height = fields.TextField(
         'Рост, в см',

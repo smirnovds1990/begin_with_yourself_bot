@@ -38,6 +38,7 @@ class UserProfile(models.Model):
     aim = models.CharField(
         max_length=10,
         choices=AIM_CHOICES,
+        null=True,
         verbose_name='Цель'
     )
     activity = models.CharField(

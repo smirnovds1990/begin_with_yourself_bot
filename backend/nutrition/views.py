@@ -18,9 +18,9 @@ class CalorieNormView(APIView):
     def get(self, request):
         profile = get_object_or_404(UserProfile, user=request.user)
         current_year = date.today().year
-        age = current_year - profile.year_of_birth
+        age = current_year - profile.birthdate
 
-        gender_factors = GENDER_MODIFIERS[profile.gender]
+        gender_factors = GENDER_MODIFIERS[profile.sex]
         calories = (
             gender_factors['base'] +
             (gender_factors['weight'] * profile.current_weight) +
@@ -28,8 +28,8 @@ class CalorieNormView(APIView):
             (gender_factors['age'] * age)
         )
 
-        activity_modifier = ACTIVITY_MODIFIERS[profile.activity_level]
-        goal_modifier = GOAL_MODIFIERS[profile.goal]
+        activity_modifier = ACTIVITY_MODIFIERS[profile.activity]
+        goal_modifier = GOAL_MODIFIERS[profile.aim]
 
         calories *= activity_modifier
         calories *= goal_modifier

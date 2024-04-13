@@ -1,7 +1,9 @@
 from django.urls import path
-from .views import (WorkoutTypeList,
-                    WorkoutTypeDetail,
-                    UserWorkoutProgramView)
+from .views import (AvailableWorkoutTypesView,
+                    UserWorkoutProgramView,
+                    WorkoutDetailView,
+                    WorkoutTypeList,
+                    WorkoutTypeDetail)
 
 urlpatterns = [
     path(
@@ -18,5 +20,20 @@ urlpatterns = [
         'user_workout_program/',
         UserWorkoutProgramView.as_view(),
         name='user-workout-program'
+    ),
+    path(
+        'user_workout_program_by_type/<int:workout_type_id>/',
+        UserWorkoutProgramView.as_view(),
+        name='user-workout-program-by-type'
+    ),
+    path(
+        'available_workout_types/',
+        AvailableWorkoutTypesView.as_view(),
+        name='available-workout-types'
+    ),
+    path(
+        'workouts/<int:pk>/',
+        WorkoutDetailView.as_view(),
+        name='workout-detail'
     ),
 ]

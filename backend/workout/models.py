@@ -37,6 +37,7 @@ class WorkoutType(models.Model):
     class Meta:
         verbose_name = 'тип тренировки'
         verbose_name_plural = 'типы тренировок'
+        ordering = ['title']
 
 
 class Workout(models.Model):

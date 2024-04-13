@@ -9,16 +9,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = [
-            'name',
-            'surname',
-            'sex',
-            'current_weight',
-            'height',
-            'birthdate',
-            'aim',
-            'activity'
-        ]
+        fields = '__all__'
         optional = [
             'aim',
             'activity'
@@ -27,28 +18,18 @@ class UserProfileSerializer(serializers.ModelSerializer):
     def validate(self, data):
         if not data['current_weight'] > 0:
             raise serializers.ValidationError(
-                "current_weight must be more zero"
+                "current_weight must be greater than zero!"
             )
         if not data['height'] > 0:
             raise serializers.ValidationError(
-                "height must be more zero"
+                "height must be greater than zero!"
             )
         if not data['birthdate'] > 1900:
             raise serializers.ValidationError(
-                "birthdate must be more 1900"
+                "birthdate must be greater than 1900!"
+            )
+        if data['user'] != self.context['request'].user:
+            raise serializers.ValidationError(
+                "You cannot create on behalf of someone else!"
             )
         return data
-
-    def create(self, validated_data):
-        request = self.context.get('request', None)
-        if get_object_or_404(UserProfile, user=request.user.id):
-            raise serializers.ValidationError(
-                "You already have a user!"
-            )
-        if request:
-            validated_data['user'] = request.user
-        else:
-            raise serializers.ValidationError(
-                "You have not user!"
-            )
-        return UserProfile.objects.create(**validated_data)

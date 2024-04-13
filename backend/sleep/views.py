@@ -30,7 +30,7 @@ class SleepViewSet(ListCreateViewSet):
 @api_view(['GET'])
 def get_last_sleep(request):
     """Получает результат последнего сна пользователя."""
-    sleeping_hours, sleep_status = Sleep.sleeping_hours(request.user)
+    sleeping_hours, sleep_status = Sleep.sleeping_status(request.user)
     return Response(
         {
             'sleeping_hours': sleeping_hours,

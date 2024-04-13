@@ -34,7 +34,7 @@ class Sleep(models.Model):
     )
 
     @classmethod
-    def sleeping_hours(cls, user):
+    def sleeping_status(cls, user):
         """Возвращает статус последнего сна."""
         last_sleep = (
             Sleep.objects.filter(client=user).order_by('-sleep_time').first()

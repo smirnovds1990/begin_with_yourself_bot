@@ -38,7 +38,7 @@ python manage.py runserver
 
 ```bash
 cd ~/Dev/begin_with_yourself_bot_3/
-python main.py
+python tg_client.py
 ```
 
 ## Run linter

@@ -56,16 +56,16 @@ class WorkoutProgramDetailInline(admin.TabularInline):
 
 class WorkoutProgramAdmin(admin.ModelAdmin):
     list_display = (
-        'gender',
-        'goal'
+        'sex',
+        'aim'
     )
     list_filter = (
-        'gender',
-        'goal'
+        'sex',
+        'aim'
     )
     search_fields = (
-        'gender',
-        'goal'
+        'sex',
+        'aim'
     )
     inlines = [WorkoutProgramDetailInline]
 

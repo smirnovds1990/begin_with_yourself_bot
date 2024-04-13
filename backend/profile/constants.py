@@ -1,4 +1,4 @@
-GENDER_CHOICES = (
+SEX_CHOICES = (
     ('M', 'Мужской'),
     ('F', 'Женский'),
 )
@@ -11,7 +11,7 @@ ACTIVITY_CHOICES = (
     ('athlete', 'Тренировки каждый день чаще чем раз в день'),
 )
 
-GOAL_CHOICES = (
+AIM_CHOICES = (
     ('gain', 'Набор'),
     ('loss', 'Сушка'),
     ('maintain', 'Поддержание'),

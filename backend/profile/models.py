@@ -1,40 +1,51 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-from .constants import (GENDER_CHOICES,
+from .constants import (SEX_CHOICES,
                         ACTIVITY_CHOICES,
-                        GOAL_CHOICES)
+                        AIM_CHOICES)
 
 
 class UserProfile(models.Model):
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
-        verbose_name="Пользователь"
+        verbose_name="Пользователь",
+        primary_key=True
     )
-    gender = models.CharField(
+    name = models.CharField(
+        max_length=100,
+        verbose_name='Имя пользователя'
+    )
+    surname = models.CharField(
+        max_length=150,
+        verbose_name='Фамилия'
+    )
+    sex = models.CharField(
         max_length=1,
-        choices=GENDER_CHOICES,
+        choices=SEX_CHOICES,
         verbose_name='Пол'
     )
-    current_weight = models.PositiveIntegerField(
+    current_weight = models.FloatField(
         verbose_name='Текущий вес (кг.)'
     )
     height = models.PositiveIntegerField(
         verbose_name='Рост (см.)'
     )
-    year_of_birth = models.PositiveIntegerField(
+    birthdate = models.PositiveIntegerField(
         verbose_name='Год рождения'
     )
-    goal = models.CharField(
+    aim = models.CharField(
         max_length=10,
-        choices=GOAL_CHOICES,
+        choices=AIM_CHOICES,
+        null=True,
         verbose_name='Цель'
     )
-    activity_level = models.CharField(
+    activity = models.CharField(
         max_length=20,
         choices=ACTIVITY_CHOICES,
-        verbose_name='Активность'
+        verbose_name='Активность',
+        null=True
     )
 
     class Meta:

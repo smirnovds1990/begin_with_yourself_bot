@@ -7,11 +7,12 @@ from aiogram_forms import dispatcher as dpf
 from aiogram_forms import fields
 from dotenv import load_dotenv
 
-from constants import (ACTIVITIES, AIMS, MAX_HEIGHT_LENGTH, MAX_NAME_LENGTH,
-                       MAX_WEIGHT_LENGTH, MIN_LENGTH, SEXS, YEAR_LENGTH)
-from functions import compile_registration_data
-from validators import (validate_height, validate_name, validate_weight,
-                        validate_year)
+from .constants import (ACTIVITY_CHOICES, AIM_CHOICES, MAX_HEIGHT_LENGTH,
+                        MAX_NAME_LENGTH, MAX_WEIGHT_LENGTH, MIN_LENGTH,
+                        SEX_CHOICES, YEAR_LENGTH)
+from .functions import compile_registration_data, get_token, reverse_choices
+from .validators import (validate_height, validate_name, validate_weight,
+                         validate_year)
 
 load_dotenv()
 
@@ -22,10 +23,11 @@ DISPATCHER = Dispatcher()
 
 @dpf.register('training')
 class TrainingForm(Form):
-    aim = fields.ChoiceField('Ваша цель', choices=AIMS)
+    aim = fields.ChoiceField(
+        'Ваша цель', choices=reverse_choices(AIM_CHOICES))
     activity = fields.ChoiceField(
         'Наиболее подходящее описание вашего образа жизни',
-        choices=ACTIVITIES
+        choices=reverse_choices(ACTIVITY_CHOICES)
     )
     current_weight = fields.TextField(
         'Ваш текущий вес',
@@ -36,13 +38,13 @@ class TrainingForm(Form):
 
     @classmethod
     async def callback(
-         cls, message: Message,
-         forms: FormsManager,
-         **data):  # pylint: disable=arguments-differ
+            cls, message: Message,
+            forms: FormsManager,
+            **data):  # pylint: disable=arguments-differ
         user: User = data['event_from_user']
         form_data = await forms.get_data(TrainingForm)
         form_data['tg_user_id'] = user.id
-        # ЗДЕСЬ PATCH ЗАПРОС В API Django
+        print(await get_token(message.from_user.id))
         print(form_data)
         #
         await message.answer('Отлично! Я зафиксировал данные :)')
@@ -50,26 +52,29 @@ class TrainingForm(Form):
 
 @dpf.register('registration')
 class RegisterForm(Form):
-    first_name = fields.TextField(
+    name = fields.TextField(
         'Ваше имя',
         min_length=MIN_LENGTH,
         max_length=MAX_NAME_LENGTH,
         validators=[validate_name],
     )
-    last_name = fields.TextField(
+    surname = fields.TextField(
         'Ваша фамилия',
         min_length=MIN_LENGTH,
         max_length=MAX_NAME_LENGTH,
         validators=[validate_name]
     )
-    sex = fields.ChoiceField('Выберите пол', choices=SEXS)
+    sex = fields.ChoiceField(
+        'Выберите пол',
+        choices=reversed(SEX_CHOICES)
+    )
     height = fields.TextField(
         'Рост, в см',
         min_length=MIN_LENGTH,
         max_length=MAX_HEIGHT_LENGTH,
         validators=[validate_height]
     )
-    birth_year = fields.TextField(
+    birthdate = fields.TextField(
         'Год рождения',
         min_length=YEAR_LENGTH,
         max_length=YEAR_LENGTH,
@@ -78,9 +83,9 @@ class RegisterForm(Form):
 
     @classmethod
     async def callback(
-         cls, message: Message,
-         forms: FormsManager,
-         **data):  # pylint: disable=arguments-differ
+            cls, message: Message,
+            forms: FormsManager,
+            **data):  # pylint: disable=arguments-differ
         '''
         Функция, возвращающая ответ на заполненную форму.
         '''
@@ -88,10 +93,11 @@ class RegisterForm(Form):
         form_data = await forms.get_data(RegisterForm)
         form_data['tg_user_id'] = user.id
         # ЗДЕСЬ ОТПРАВКА ПОСТ ЗАПРОСОВ В API Django
+        print(await get_token(message.from_user.id))
         print(await compile_registration_data(form_data))
         #
         await message.answer(
-            f'Поздравляю, {form_data["first_name"]}. Вы зарегистрированы!')
+            f'Поздравляю, {form_data["name"]}. Вы зарегистрированы!')
         await forms.show('training')
 
 

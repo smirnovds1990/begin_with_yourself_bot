@@ -9,11 +9,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import (Workout,
+from .models import (UserWorkoutSession,
+                     Workout,
                      WorkoutType,
                      WorkoutProgram,
                      WorkoutProgramDetail)
-from .serializers import (WorkoutSerializer,
+from .serializers import (UserWorkoutSessionSerializer,
+                          WorkoutSerializer,
                           WorkoutTypeSerializer,
                           WorkoutProgramSerializer)
 from .filters import WorkoutTypeFilter
@@ -168,3 +170,146 @@ class WorkoutDetailView(APIView):
             serializer.data,
             status=status.HTTP_200_OK
         )
+
+
+class WorkoutSessionListCreateAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        request_body=UserWorkoutSessionSerializer,
+        responses={201: UserWorkoutSessionSerializer}
+    )
+    def post(self, request):
+        serializer = UserWorkoutSessionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(
+                user=request.user
+            )
+            return Response(
+                serializer.data,
+                status=status.HTTP_201_CREATED
+            )
+        else:
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+    def get(self, request):
+        sessions = UserWorkoutSession.objects.filter(
+            user=request.user
+        )
+        serializer = UserWorkoutSessionSerializer(
+            sessions,
+            many=True
+        )
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK
+        )
+
+
+class WorkoutSessionDetailAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, session_id):
+        session = get_object_or_404(
+            UserWorkoutSession,
+            pk=session_id,
+            user=request.user
+        )
+        serializer = UserWorkoutSessionSerializer(
+            session
+        )
+        return Response(
+            serializer.data
+        )
+
+    @swagger_auto_schema(
+        request_body=UserWorkoutSessionSerializer,
+        responses={200: UserWorkoutSessionSerializer()}
+    )
+    def patch(self, request, session_id):
+
+        session = get_object_or_404(
+            UserWorkoutSession,
+            pk=session_id,
+            user=request.user
+        )
+
+        if 'current_workout' in request.data:
+            current_workout_id = request.data.get('current_workout')
+            if current_workout_id:
+                current_workout = get_object_or_404(
+                    Workout,
+                    pk=current_workout_id
+                )
+                session.current_workout = current_workout
+            else:
+                session.current_workout = None
+
+        completed_workout_id = request.data.get('complete_workout')
+        if completed_workout_id:
+            completed_workout = get_object_or_404(
+                Workout,
+                pk=completed_workout_id
+            )
+            session.completed_workouts.add(completed_workout)
+
+        session.save()
+        serializer = UserWorkoutSessionSerializer(
+            session
+        )
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK
+        )
+
+    def delete(self, request, session_id):
+        session = get_object_or_404(
+            UserWorkoutSession,
+            pk=session_id,
+            user=request.user
+        )
+        session.delete()
+        return Response(
+            status=status.HTTP_204_NO_CONTENT
+        )
+
+
+class SessionAvailableWorkoutView(BaseUserWorkoutProgramView):
+    def get(self, request, session_id):
+
+        session = get_object_or_404(
+            UserWorkoutSession,
+            pk=session_id
+        )
+
+        workout_program = self.get_user_workout_program(
+            request
+        )
+
+        completed_workouts_ids = session.completed_workouts.values_list(
+            'id',
+            flat=True
+        )
+
+        workout_details = workout_program.program_details.exclude(
+            workout__id__in=completed_workouts_ids
+        ).filter(
+            workout__workout_type_id=session.workout_type
+        ).order_by(
+            'order'
+        ).first()
+
+        if workout_details:
+            serializer = WorkoutSerializer(workout_details.workout)
+            return Response(
+                serializer.data,
+                status=status.HTTP_200_OK
+            )
+        else:
+            return Response(
+                {"message": "Нет доступных тренировок"},
+                status=status.HTTP_404_NOT_FOUND
+            )

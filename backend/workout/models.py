@@ -3,6 +3,7 @@ from profile.constants import (SEX_CHOICES,
 
 from django.db import models
 from django.core.validators import MinValueValidator
+from django.contrib.auth.models import User
 
 from .validators import validate_video_extension
 
@@ -161,3 +162,50 @@ class WorkoutProgramDetail(models.Model):
         verbose_name_plural = 'элементы программы тренировок'
         unique_together = ('workout_program', 'workout', 'order')
         ordering = ['order']
+
+
+class UserWorkoutSession(models.Model):
+    """
+    Определяет пользовательскую сессию использования приложения тренировки.
+    Сделана в разрезе типов тренировок,
+    чтобы пользователь мог зайти в другой вид тренировок.
+    """
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name='Пользователь'
+    )
+    workout_type = models.ForeignKey(
+        WorkoutType,
+        on_delete=models.CASCADE,
+        null=False,
+        verbose_name='Тип тренировки'
+    )
+    current_workout = models.ForeignKey(
+        Workout,
+        on_delete=models.SET_NULL,
+        null=True,
+        verbose_name='Текущая тренировка'
+    )
+    completed_workouts = models.ManyToManyField(
+        Workout,
+        related_name='completed_workouts',
+        verbose_name='Выполненные тренировки',
+        blank=True
+    )
+    timestamp = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Время начала'
+    )
+
+    def __str__(self):
+        session_info = f'Сессия {self.user.username}'
+        if self.workout_type:
+            session_info += f' - {self.workout_type.title}'
+        return session_info
+
+    class Meta:
+        verbose_name = 'сессия тренировки пользователя'
+        verbose_name_plural = 'сессии тренировки пользователей'
+        ordering = ['-timestamp']
+        unique_together = ('user', 'workout_type')

@@ -189,11 +189,11 @@ class WorkoutSessionListCreateAPIView(APIView):
                 serializer.data,
                 status=status.HTTP_201_CREATED
             )
-        else:
-            return Response(
-                serializer.errors,
-                status=status.HTTP_400_BAD_REQUEST
-            )
+
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
     def get(self, request):
         sessions = UserWorkoutSession.objects.filter(
@@ -308,8 +308,8 @@ class SessionAvailableWorkoutView(BaseUserWorkoutProgramView):
                 serializer.data,
                 status=status.HTTP_200_OK
             )
-        else:
-            return Response(
-                {"message": "Нет доступных тренировок"},
-                status=status.HTTP_404_NOT_FOUND
-            )
+
+        return Response(
+            {"message": "Нет доступных тренировок"},
+            status=status.HTTP_404_NOT_FOUND
+        )

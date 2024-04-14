@@ -6,6 +6,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework import routers, permissions
 
+from profile.views import UserProfileView
 from sleep.views import SleepViewSet
 
 router = routers.DefaultRouter()
@@ -58,7 +59,7 @@ urlpatterns = [
         name='schema-redoc'
     ),
     path('api/sleep/', include('sleep.urls')),
-    path('profile/', include('profile.urls')),
+    path('profile/', UserProfileView.as_view()),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
 ]

@@ -22,6 +22,8 @@ class Migration(migrations.Migration):
                 ('surname', models.CharField(max_length=150, verbose_name='Фамилия')),
                 ('sex', models.CharField(choices=[('M', 'Мужской'), ('F', 'Женский')], max_length=1, verbose_name='Пол')),
                 ('current_weight', models.FloatField(verbose_name='Текущий вес (кг.)')),
+                ('sex', models.CharField(choices=[('M', 'Мужской'), ('F', 'Женский')], max_length=1, verbose_name='Пол')),
+                ('current_weight', models.FloatField(verbose_name='Текущий вес (кг.)')),
                 ('height', models.PositiveIntegerField(verbose_name='Рост (см.)')),
                 ('birthdate', models.PositiveIntegerField(verbose_name='Год рождения')),
                 ('aim', models.CharField(choices=[('gain', 'Набор'), ('loss', 'Сушка'), ('maintain', 'Поддержание')], max_length=10, null=True, verbose_name='Цель')),

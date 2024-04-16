@@ -62,12 +62,12 @@ docker compose exec backend cp -r /backend/collected_static/. /backend_static/st
 ```bash
 docker compose exec -it backend python manage.py migrate
 ```
-Go to http://localhost:8000/
-
 run migrations for tg_bot database:
 ```bash
-cd telegram_client/
-alembic upgrade head
+docker compose exec telegram_client alembic upgrade head
+```
+Go to http://localhost:8000/
+Open @bot_name (where 'bot_name' is your bot's name) in telegram and send '/start'
 
 ## Load fixtures
 

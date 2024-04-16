@@ -13,7 +13,7 @@ services:
     ports:
       - '5432:5432'
     healthcheck:
-      test: ["CMD", "pg_isready"]
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -25,6 +25,11 @@ services:
       - tg_pg_data:/var/lib/postgresql/data
     ports:
       - '5433:5432'
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   backend:
     build: 
       context: .
@@ -46,3 +51,14 @@ services:
       - 8000:8000
     depends_on:
       - backend
+  telegram_client:
+    build:
+      context: .
+      dockerfile: telegram_client/Dockerfile
+    env_file:
+      - telegram_client/.env
+    depends_on:
+      telegram_db:
+        condition: service_healthy
+      nginx:
+        condition: service_started

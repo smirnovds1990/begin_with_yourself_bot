@@ -311,5 +311,5 @@ class SessionAvailableWorkoutView(BaseUserWorkoutProgramView):
 
         return Response(
             {"message": "Нет доступных тренировок"},
-            status=status.HTTP_404_NOT_FOUND
+            status=status.HTTP_200_OK
         )

@@ -6,8 +6,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework import routers, permissions
 
-from profile.views import UserProfileView
-
+from profile.views import UserProfileView  # pylint: disable=wrong-import-order
 from sleep.views import SleepViewSet
 
 router = routers.DefaultRouter()

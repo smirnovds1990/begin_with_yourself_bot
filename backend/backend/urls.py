@@ -6,6 +6,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework import routers, permissions
 
+from profile.views import UserProfileView  # pylint: disable=wrong-import-order
 from sleep.views import SleepViewSet
 
 router = routers.DefaultRouter()
@@ -58,8 +59,8 @@ urlpatterns = [
         name='schema-redoc'
     ),
     path('api/sleep/', include('sleep.urls')),
+    path('profile/', UserProfileView.as_view()),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
 ]
-
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -74,11 +74,11 @@ docker compose exec -it backend python manage.py migrate
 ```
 Go to http://localhost:8000/
 
-## Run backend in Docker
+## Run Telegram client in Docker
 
 set in .env:
 DB_HOST=telegram_db
-DB_PORT=5432
+DB_PORT=5433
 
 ```bash
 cd begin_with_yourself_bot_3/

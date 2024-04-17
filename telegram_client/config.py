@@ -1,7 +1,8 @@
+from http import HTTPStatus
 from os import getenv
 
 from aiogram import Bot, Dispatcher
-from aiogram.types import Message
+from aiogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram_forms import Form, FormsManager
 from aiogram_forms import dispatcher as dpf
 from aiogram_forms import fields
@@ -9,8 +10,9 @@ from dotenv import load_dotenv
 
 from .constants import (ACTIVITY_CHOICES, AIM_CHOICES, MAX_HEIGHT_LENGTH,
                         MAX_NAME_LENGTH, MAX_WEIGHT_LENGTH, MIN_LENGTH,
-                        SEX_CHOICES, YEAR_LENGTH)
-from .functions import compile_registration_data, get_token, reverse_choices
+                        PROFILE_URL, SEX_CHOICES, USER_URL, YEAR_LENGTH)
+from .functions import (backend_get, backend_post, compile_registration_data,
+                        get_token, patch_profile, reverse_choices)
 from .validators import (validate_height, validate_name, validate_weight,
                          validate_year)
 
@@ -21,16 +23,34 @@ BOT = Bot(TOKEN)
 DISPATCHER = Dispatcher()
 
 
+def get_keyboard() -> InlineKeyboardMarkup:
+    buttons = [
+        InlineKeyboardButton(
+            text='Питание',
+            callback_data='/nutrition'),
+        InlineKeyboardButton(
+            text='Сон',
+            callback_data='/sleep'),
+        InlineKeyboardButton(
+            text='Тренировка',
+            callback_data='/training'),
+        InlineKeyboardButton(
+            text='Обновить',
+            callback_data='/renew'),
+    ]
+    return InlineKeyboardMarkup(inline_keyboard=[buttons])
+
+
 @dpf.register('training')
 class TrainingForm(Form):
     aim = fields.ChoiceField(
-        'Ваша цель', choices=reverse_choices(AIM_CHOICES))
+        'Ваша цель 🎯', choices=reverse_choices(AIM_CHOICES))
     activity = fields.ChoiceField(
-        'Наиболее подходящее описание вашего образа жизни',
+        'Наиболее подходящее описание вашего образа жизни 🤸🏼‍♀️',
         choices=reverse_choices(ACTIVITY_CHOICES)
     )
     current_weight = fields.TextField(
-        'Ваш текущий вес',
+        'Ваш текущий вес ⚖️',
         min_length=MIN_LENGTH,
         max_length=MAX_WEIGHT_LENGTH,
         validators=[validate_weight]
@@ -42,10 +62,14 @@ class TrainingForm(Form):
             forms: FormsManager,
             **data):  # pylint: disable=arguments-differ
         form_data = await forms.get_data(TrainingForm)
-        print(await get_token(message.from_user.id))
-        print(form_data)
-        #
-        await message.answer('Отлично! Я зафиксировал данные :)')
+        user_token = await get_token(message.from_user.id)
+        user_data = form_data
+        user_data['user'] = (
+            await backend_get(USER_URL, user_token)).json()['id']
+        await patch_profile(user_token, user_data)
+        await message.answer(
+            'Отлично! Я зафиксировал данные 😏',
+            reply_markup=get_keyboard())
 
 
 @dpf.register('registration')
@@ -88,12 +112,18 @@ class RegisterForm(Form):
         Функция, возвращающая ответ на заполненную форму.
         '''
         form_data = await forms.get_data(RegisterForm)
-        print(await get_token(message.from_user.id))
-        print(await compile_registration_data(form_data))
-        #
-        await message.answer(
-            f'Поздравляю, {form_data["name"]}. Вы зарегистрированы!')
-        await forms.show('training')
+        user_token = await get_token(message.from_user.id)
+        user_data = await compile_registration_data(form_data)
+        user_data['user'] = (
+            await backend_get(USER_URL, user_token)).json()['id']
+        if (await backend_post(
+             PROFILE_URL, user_token, user_data
+             )).status_code == HTTPStatus.CREATED:
+            await message.answer(
+                f'Поздравляю, {form_data["name"]}!🥳\nВы зарегистрированы!')
+            await forms.show('training')
+        else:
+            await message.answer('Мне кажется, вы уже зарегистрированы 🤔')
 
 
 dpf.attach(DISPATCHER)

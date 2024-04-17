@@ -15,11 +15,23 @@ async def create_token(user_data: dict):
     return re.post(TOKEN_URL, data=user_data, timeout=5).json()['access']
 
 
-async def get_profile(token: str):
-    headers = {
-        'Authorization': f'Bearer {token}'
-    }
-    return re.get(PROFILE_URL, headers=headers, timeout=5).json()
+async def compile_header(token: str):
+    return {'Authorization': f'Bearer {token}'}
+
+
+async def backend_get(url: str, token: str) -> re.Response:
+    headers = await compile_header(token)
+    return re.get(url, headers=headers, timeout=5)
+
+
+async def backend_post(url: str, token: str, data: dict) -> re.Response:
+    headers = await compile_header(token)
+    return re.post(url, headers=headers, json=data, timeout=5)
+
+
+async def patch_profile(token: str, data: dict) -> re.Response:
+    headers = await compile_header(token)
+    return re.patch(PROFILE_URL, headers=headers, json=data)
 
 
 async def get_token(user_id: int):

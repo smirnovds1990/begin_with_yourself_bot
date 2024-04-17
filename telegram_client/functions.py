@@ -31,7 +31,7 @@ async def backend_post(url: str, token: str, data: dict) -> re.Response:
 
 async def patch_profile(token: str, data: dict) -> re.Response:
     headers = await compile_header(token)
-    return re.patch(PROFILE_URL, headers=headers, json=data)
+    return re.patch(PROFILE_URL, headers=headers, json=data, timeout=5)
 
 
 async def get_token(user_id: int):

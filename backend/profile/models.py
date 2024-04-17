@@ -27,7 +27,8 @@ class UserProfile(models.Model):
         verbose_name='Пол'
     )
     current_weight = models.FloatField(
-        verbose_name='Текущий вес (кг.)'
+        verbose_name='Текущий вес (кг.)',
+        null=True
     )
     height = models.PositiveIntegerField(
         verbose_name='Рост (см.)'
@@ -38,8 +39,8 @@ class UserProfile(models.Model):
     aim = models.CharField(
         max_length=10,
         choices=AIM_CHOICES,
-        null=True,
-        verbose_name='Цель'
+        verbose_name='Цель',
+        null=True
     )
     activity = models.CharField(
         max_length=20,

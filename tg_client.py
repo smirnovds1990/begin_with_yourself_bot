@@ -74,7 +74,7 @@ async def command_renew(message: Message, forms: FormsManager):
 @DISPATCHER.message(Command('register'))
 async def command_register(message: Message, forms: FormsManager):
     user_token = await get_token(message.from_user.id)
-    status = (await backend_get(PROFILE_URL, user_token))
+    status = await backend_get(PROFILE_URL, user_token)
     if not isinstance(status, dict):
         if status.status_code == HTTPStatus.OK:
             await message.answer(
@@ -105,7 +105,7 @@ async def test_2(user: TelegramUser):
     '''
     Тестовая функция для отправки индивидуальных сообщений ботом.
     '''
-    data = (await backend_get(PROFILE_URL, user.token))
+    data = await backend_get(PROFILE_URL, user.token)
     if not isinstance(data, dict):
         name = data.json()['name']
         message = f'Вам, {name}, пора позаниматься!'

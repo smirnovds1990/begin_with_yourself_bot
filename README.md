@@ -81,7 +81,7 @@ Go to http://localhost:8000/
 
 set in .env:
 DB_HOST=telegram_db
-DB_PORT=5433
+DB_PORT=5432
 
 ```bash
 cd begin_with_yourself_bot_3/
@@ -90,7 +90,7 @@ docker compose up telegram_db telegram_client
 
 run migrations for tg_bot database:
 ```bash
-docker compose exec telegram_client alembic upgrade head
+sudo docker compose exec -w /telegram_client/telegram_client telegram_client alembic upgrade head
 ```
 Open @bot_name (where 'bot_name' is your bot's name) in telegram and send '/start'
 

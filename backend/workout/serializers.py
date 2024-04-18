@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import (Workout,
+from .models import (UserWorkoutSession,
+                     Workout,
                      WorkoutType,
                      WorkoutProgram,
                      WorkoutProgramDetail)
@@ -89,3 +90,20 @@ class WorkoutSerializer(serializers.ModelSerializer):
     class Meta:
         model = Workout
         fields = '__all__'
+
+
+class UserWorkoutSessionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserWorkoutSession
+        fields = [
+            'id',
+            'user',
+            'workout_type',
+            'current_workout',
+            'completed_workouts',
+            'timestamp'
+        ]
+        read_only_fields = [
+            'user',
+            'timestamp'
+        ]

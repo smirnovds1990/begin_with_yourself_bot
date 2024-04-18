@@ -1,5 +1,8 @@
 from django.urls import path
 from .views import (AvailableWorkoutTypesView,
+                    SessionAvailableWorkoutView,
+                    WorkoutSessionListCreateAPIView,
+                    WorkoutSessionDetailAPIView,
                     UserWorkoutProgramView,
                     WorkoutDetailView,
                     WorkoutTypeList,
@@ -32,8 +35,21 @@ urlpatterns = [
         name='available-workout-types'
     ),
     path(
-        'workouts/<int:pk>/',
+        '<int:pk>/',
         WorkoutDetailView.as_view(),
         name='workout-detail'
+    ),
+    path(
+        'workout-session/',
+        WorkoutSessionListCreateAPIView.as_view(),
+        name='workout-session-list-create'
+    ),
+    path('workout-session/<int:session_id>/',
+         WorkoutSessionDetailAPIView.as_view(),
+         name='workout-session-detail'),
+    path(
+        'workout-session/<int:session_id>/available-workout/',
+        SessionAvailableWorkoutView.as_view(),
+        name='available-workout'
     ),
 ]

@@ -74,14 +74,20 @@ async def command_renew(message: Message, forms: FormsManager):
 @DISPATCHER.message(Command('register'))
 async def command_register(message: Message, forms: FormsManager):
     user_token = await get_token(message.from_user.id)
-    status = (await backend_get(PROFILE_URL, user_token)).status_code
-    if status == HTTPStatus.OK:
-        await message.answer(
-            'Вы уже зарегистированы. Вероятно, кнопки ниже могут вам помочь 🤫',
-            reply_markup=get_keyboard())
-    elif status == HTTPStatus.NOT_FOUND:
-        await message.answer('Давайте зарегиструемся!')
-        await forms.show('registration')
+    status = (await backend_get(PROFILE_URL, user_token))
+    if not isinstance(status, dict):
+        if status.status_code == HTTPStatus.OK:
+            await message.answer(
+                'Вы уже зарегистированы. '
+                'Вероятно, кнопки ниже могут вам помочь 🤫',
+                reply_markup=get_keyboard())
+        elif status.status_code == HTTPStatus.NOT_FOUND:
+            await message.answer('Давайте зарегиструемся!')
+            await forms.show('registration')
+        else:
+            await message.answer(
+                'Кажется, что-то пошло не так.\n'
+                'Попробуйте еще раз или подойдите позже.')
     else:
         await message.answer(
             'Кажется, что-то пошло не так.\n'
@@ -99,9 +105,11 @@ async def test_2(user: TelegramUser):
     '''
     Тестовая функция для отправки индивидуальных сообщений ботом.
     '''
-    name = (await backend_get(PROFILE_URL, user.token))['name']
-    message = f'Вам, {name}, пора позаниматься!'
-    await BOT.send_message(user.tg_user_id, message)
+    data = (await backend_get(PROFILE_URL, user.token))
+    if not isinstance(data, dict):
+        name = data.json()['name']
+        message = f'Вам, {name}, пора позаниматься!'
+        await BOT.send_message(user.tg_user_id, message)
 
 
 async def main():

@@ -19,19 +19,28 @@ async def compile_header(token: str):
     return {'Authorization': f'Bearer {token}'}
 
 
-async def backend_get(url: str, token: str) -> re.Response:
+async def backend_get(url: str, token: str) -> re.Response | dict:
     headers = await compile_header(token)
-    return re.get(url, headers=headers, timeout=5)
+    try:
+        return re.get(url, headers=headers, timeout=5)
+    except re.exceptions.ConnectionError:
+        return {'error': 'CONN'}
 
 
-async def backend_post(url: str, token: str, data: dict) -> re.Response:
+async def backend_post(url: str, token: str, data: dict) -> re.Response | dict:
     headers = await compile_header(token)
-    return re.post(url, headers=headers, json=data, timeout=5)
+    try:
+        return re.post(url, headers=headers, json=data, timeout=5)
+    except re.exceptions.ConnectionError:
+        return {'error': 'CONN'}
 
 
-async def patch_profile(token: str, data: dict) -> re.Response:
+async def patch_profile(token: str, data: dict) -> re.Response | dict:
     headers = await compile_header(token)
-    return re.patch(PROFILE_URL, headers=headers, json=data, timeout=5)
+    try:
+        return re.patch(PROFILE_URL, headers=headers, json=data, timeout=5)
+    except re.exceptions.ConnectionError:
+        return {'error': 'CONN'}
 
 
 async def get_token(user_id: int):

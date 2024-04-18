@@ -64,12 +64,17 @@ class TrainingForm(Form):
         form_data = await forms.get_data(TrainingForm)
         user_token = await get_token(message.from_user.id)
         user_data = form_data
-        user_data['user'] = (
-            await backend_get(USER_URL, user_token)).json()['id']
-        await patch_profile(user_token, user_data)
-        await message.answer(
-            'Отлично! Я зафиксировал данные 😏',
-            reply_markup=get_keyboard())
+        user_id = await backend_get(USER_URL, user_token)
+        if isinstance(user_id, dict):
+            await message.answer(
+                'Кажется, что-то пошло не так.\n'
+                'Попробуйте еще раз или подойдите позже.')
+        else:
+            user_data['user'] = user_id.json()['id']
+            await patch_profile(user_token, user_data)
+            await message.answer(
+                'Отлично! Я зафиксировал данные 😏',
+                reply_markup=get_keyboard())
 
 
 @dpf.register('registration')
@@ -114,16 +119,21 @@ class RegisterForm(Form):
         form_data = await forms.get_data(RegisterForm)
         user_token = await get_token(message.from_user.id)
         user_data = await compile_registration_data(form_data)
-        user_data['user'] = (
-            await backend_get(USER_URL, user_token)).json()['id']
-        status = (await backend_post(
-            PROFILE_URL, user_token, user_data)).status_code
-        if status == HTTPStatus.CREATED:
+        user_id = await backend_get(USER_URL, user_token)
+        if isinstance(user_id, dict):
             await message.answer(
-                f'Поздравляю, {form_data["name"]}!🥳\nВы зарегистрированы!')
-            await forms.show('training')
+                'Кажется, что-то пошло не так.\n'
+                'Попробуйте еще раз или подойдите позже.')
         else:
-            await message.answer('Мне кажется, вы уже зарегистрированы 🤔')
+            user_data['user'] = user_id.json()['id']
+            status = (await backend_post(
+                PROFILE_URL, user_token, user_data)).status_code
+            if status == HTTPStatus.CREATED:
+                await message.answer(
+                    f'Поздравляю, {form_data["name"]}!🥳\nВы зарегистрированы!')
+                await forms.show('training')
+            else:
+                await message.answer('Мне кажется, вы уже зарегистрированы 🤔')
 
 
 dpf.attach(DISPATCHER)

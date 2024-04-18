@@ -50,6 +50,9 @@ DB_PORT=5433
 ```bash
 cd ~/Dev/begin_with_yourself_bot_3/
 docker compose up telegram_db
+cd ~/Dev/begin_with_yourself_bot_3/telegram_client/
+alembic upgrade head
+cd ..
 python tg_client.py
 ```
 Open @bot_name (where 'bot_name' is your bot's name) in telegram and send '/start'

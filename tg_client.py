@@ -74,15 +74,18 @@ async def command_renew(message: Message, forms: FormsManager):
 @DISPATCHER.message(Command('register'))
 async def command_register(message: Message, forms: FormsManager):
     user_token = await get_token(message.from_user.id)
-    if (await backend_get(
-         PROFILE_URL, user_token
-         )).status_code == HTTPStatus.NOT_FOUND:
+    status = (await backend_get(PROFILE_URL, user_token)).status_code
+    if status == HTTPStatus.OK:
+        await message.answer(
+            'Вы уже зарегистированы. Вероятно, кнопки ниже могут вам помочь 🤫',
+            reply_markup=get_keyboard())
+    elif status == HTTPStatus.NOT_FOUND:
         await message.answer('Давайте зарегиструемся!')
         await forms.show('registration')
     else:
         await message.answer(
-            'Вы уже зарегистированы. Вероятно, кнопки ниже могут вам помочь 🤫',
-            reply_markup=get_keyboard())
+            'Кажется, что-то пошло не так.\n'
+            'Попробуйте еще раз или подойдите позже.')
 
 
 async def test(chat_id: int):

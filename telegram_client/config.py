@@ -116,9 +116,9 @@ class RegisterForm(Form):
         user_data = await compile_registration_data(form_data)
         user_data['user'] = (
             await backend_get(USER_URL, user_token)).json()['id']
-        if (await backend_post(
-             PROFILE_URL, user_token, user_data
-             )).status_code == HTTPStatus.CREATED:
+        status = (await backend_post(
+            PROFILE_URL, user_token, user_data)).status_code
+        if status == HTTPStatus.CREATED:
             await message.answer(
                 f'Поздравляю, {form_data["name"]}!🥳\nВы зарегистрированы!')
             await forms.show('training')

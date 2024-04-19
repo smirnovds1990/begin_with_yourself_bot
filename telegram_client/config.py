@@ -33,7 +33,7 @@ def get_keyboard() -> InlineKeyboardMarkup:
             callback_data='/sleep'),
         InlineKeyboardButton(
             text='Тренировка',
-            callback_data='/training'),
+            callback_data='/workout'),
         InlineKeyboardButton(
             text='Обновить',
             callback_data='/renew'),

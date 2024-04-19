@@ -5,11 +5,11 @@ from sleep.constants import (
     GOOD_SLEEP_FRONTIER,
     GREAT_SLEEP_FRONTIER,
     MAX_SLEEPING_HOURS_FRONTIER,
+    BAD_SLEEP_MESSAGE,
+    GOOD_SLEEP_MESSAGE,
+    GREAT_SLEEP_MESSAGE
 )
 
-BAD_SLEEP_MESSAGE = 'мало'
-GOOD_SLEEP_MESSAGE = 'хорошо'
-GREAT_SLEEP_MESSAGE = 'отлично'
 SLEEP_NOT_FOUND_MESSAGE = 'Sleep not found'
 NOT_WAKE_UP_MESSAGE = 'User did not wake up'
 NOT_START_SLEEPING_MESSAGE = 'User did not start sleeping'

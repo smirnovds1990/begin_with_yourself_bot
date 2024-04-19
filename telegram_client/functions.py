@@ -22,7 +22,9 @@ async def create_token(user_data: dict):
 
 
 async def get_profile(token: str):
-    headers = {'Authorization': f'Bearer {token}'}
+    headers = {
+        'Authorization': f'Bearer {token}'
+    }
     return re.get(PROFILE_URL, headers=headers, timeout=5).json()
 
 
@@ -31,9 +33,9 @@ async def get_token(user_id: int):
     async with async_session() as session:
         user = (
             await session.scalars(
-                select(TelegramUser).where(TelegramUser.tg_user_id == user_id)
-            )
-        ).one_or_none()
+                select(TelegramUser).where(
+                    TelegramUser.tg_user_id == user_id))
+                ).one_or_none()
     return user.token
 
 

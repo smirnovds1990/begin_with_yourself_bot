@@ -3,9 +3,8 @@ from hashlib import sha256
 from random import choice
 import requests as re
 
-from aiogram import F
 from aiogram.filters.command import Command
-from aiogram.types import CallbackQuery, Message
+from aiogram.types import Message
 from aiogram_forms import FormsManager
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from sqlalchemy import select

@@ -82,9 +82,6 @@ async def start_wake_up(message: Message):
         )
 
 
-API_URL = 'http://your_api_url/'  # Замените на адрес вашего API
-
-
 async def test(chat_id: int):
     '''
     Тестовая функция для отправки сообщений ботом.

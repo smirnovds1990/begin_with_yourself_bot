@@ -3,11 +3,11 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import async_sessionmaker
 
 from .constants import (
+    LAST_SLEEP_URL,
     LOGIN_URL,
     PROFILE_URL,
-    TOKEN_URL,
     SLEEP_URL,
-    LAST_SLEEP_URL,
+    TOKEN_URL,
 )
 from .db import ENGINE, TelegramUser
 
@@ -46,7 +46,8 @@ async def compile_registration_data(data: dict) -> dict:
     return data
 
 
-async def create_sleep(user_id: int, is_sleeping: bool = False):
+async def create_sleep(user_id: int, is_sleeping: bool = True):
+    """Функция, отправляющая запрос на создание сна."""
     return re.post(
         SLEEP_URL,
         headers={'Authorization': f'Bearer {await get_token(user_id)}'},
@@ -56,7 +57,8 @@ async def create_sleep(user_id: int, is_sleeping: bool = False):
 
 
 async def get_last_sleep(user_id: int):
-    re.get(
+    """Функция, отправляющая запрос на получение информации о последнем сне."""
+    return re.get(
         LAST_SLEEP_URL,
         headers={'Authorization': f'Bearer {await get_token(user_id)}'},
         timeout=5,

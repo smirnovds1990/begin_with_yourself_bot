@@ -1,7 +1,4 @@
-from django.urls import reverse
-
 import asyncio
-import requests as re
 from hashlib import sha256
 from random import choice
 
@@ -15,7 +12,12 @@ from sqlalchemy.ext.asyncio import async_sessionmaker
 from telegram_client.config import BOT, DISPATCHER
 from telegram_client.constants import NOTIFICATIONS
 from telegram_client.db import ENGINE, TelegramUser
-from telegram_client.functions import create_token, get_profile, get_token
+from telegram_client.functions import (
+    create_sleep,
+    create_token,
+    get_last_sleep,
+    get_profile,
+)
 
 
 @DISPATCHER.message(Command('start'))
@@ -52,39 +54,28 @@ async def command_register(message: Message, forms: FormsManager):
 
 @DISPATCHER.message(Command('sleep'))
 async def start_sleep(message: Message):
-    response = re.post(
-        reverse('sleep'),
-        headers={
-            'Authorization': f'Bearer {await get_token(message.from_user.id)}'
-        },
-        timeout=1.5,
-    )
+    """Обработчик события /sleep."""
+    await create_sleep(message.from_user.id)
     await message.answer("Приятных снов!")
-    return response.json()
 
 
 @DISPATCHER.message(Command('wake_up'))
 async def start_wake_up(message: Message):
-    token = await get_token(message.from_user.id)
-    headers = {'Authorization': f'Bearer {token}'}
-    response = re.post(
-        'http://127.0.0.1:8000/api/sleep/',
-        headers=headers,
-        data={'is_sleeping': False},
-        timeout=1.5,
-    )
-    response = re.get(
-        'http://127.0.0.1:8000/api/sleep/last_sleep/',
-        headers=headers,
-        timeout=1.5,
-    )
-    response_data = response.json()
-    sleeping_hours = response_data.get('sleeping_hours')
-    sleep_status = response_data.get('sleep_status')
-    await message.answer(
-        f'Вы спали {sleeping_hours} часов. Это {sleep_status}.'
-    )
-    return response_data
+    """Обработчик события /wake_up."""
+    await create_sleep(message.from_user.id, is_sleeping=False)
+    response = await get_last_sleep(message.from_user.id)
+    sleeping_hours = response.get('sleeping_hours')
+    sleep_status = response.get('sleep_status')
+    if sleep_status not in (
+        'мало',
+        'хорошо',
+        'отлично',
+    ):
+        await message.answer(sleep_status)
+    else:
+        await message.answer(
+            f'Вы спали {sleeping_hours} часов. Это {sleep_status}.'
+        )
 
 
 API_URL = 'http://your_api_url/'  # Замените на адрес вашего API

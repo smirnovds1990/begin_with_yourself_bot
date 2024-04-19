@@ -1,18 +1,20 @@
 import asyncio
 from hashlib import sha256
 from random import choice
+import requests as re
 
+from aiogram import F
 from aiogram.filters.command import Command
-from aiogram.types import Message
+from aiogram.types import CallbackQuery, Message
 from aiogram_forms import FormsManager
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import async_sessionmaker
 
 from telegram_client.config import BOT, DISPATCHER
-from telegram_client.constants import NOTIFICATIONS
+from telegram_client.constants import NOTIFICATIONS, NUTRITION_URL
 from telegram_client.db import ENGINE, TelegramUser
-from telegram_client.functions import create_token, get_profile
+from telegram_client.functions import create_token, get_profile, get_token
 
 
 @DISPATCHER.message(Command('start'))
@@ -44,6 +46,26 @@ async def start_message(message: Message):
 async def command_register(message: Message, forms: FormsManager):
     await message.answer('Давайте зарегиструемся!')
     await forms.show('registration')
+
+
+@DISPATCHER.message(Command('nutrition'))
+async def nutrilon_handler(message: Message):
+    token = await get_token(message.from_user.id)
+    headers = {
+        'Authorization': f'Bearer {token}'
+    }
+    nutrition = re.get(
+        NUTRITION_URL,
+        headers=headers,
+        timeout=5
+    ).json()
+    answer = (
+        f'Норма каллорий в день = {nutrition["calories_norm"]}\n'
+        f'Норма белков в день = {nutrition["protein"]}\n'
+        f'Норма жиров в день = {nutrition["fat"]}\n'
+        f'Норма углеводов в день = {nutrition["protein"]}\n'
+    )
+    await message.answer(answer)
 
 
 async def test(chat_id: int):

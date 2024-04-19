@@ -33,5 +33,17 @@ class CalorieNormView(APIView):
 
         calories *= activity_modifier
         calories *= goal_modifier
+        calories = round(calories)
 
-        return Response({'calories_norm': calories})
+        protein = round(calories * 0.3 / 4)
+        fat = round(calories * 0.3 / 9)
+        supplement = round(calories * 0.4 / 4)
+
+        return Response(
+                {
+                'calories_norm': calories,
+                'protein': protein,
+                'fat': fat,
+                'supplement': supplement
+            }
+        )

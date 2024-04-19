@@ -9,7 +9,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import async_sessionmaker
 
-from backend.sleep import (
+from backend.sleep.constants import (
     BAD_SLEEP_MESSAGE,
     GOOD_SLEEP_MESSAGE,
     GREAT_SLEEP_MESSAGE,
@@ -23,6 +23,8 @@ from telegram_client.functions import (
     get_last_sleep,
     get_profile,
 )
+
+SLEEP_MESSAGE = 'Вы спали {sleeping_hours} часов. Это {sleep_status}.'
 
 
 @DISPATCHER.message(Command('start'))
@@ -78,7 +80,9 @@ async def start_wake_up(message: Message):
         await message.answer(sleep_status)
     else:
         await message.answer(
-            f'Вы спали {sleeping_hours} часов. Это {sleep_status}.'
+            SLEEP_MESSAGE.format(
+                sleeping_hours=sleeping_hours, sleep_status=sleep_status
+            )
         )
 
 

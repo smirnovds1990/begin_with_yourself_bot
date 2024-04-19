@@ -54,9 +54,9 @@ async def sleep_handler(callback: CallbackQuery):
     await callback.message.answer('/sleep handler message.')
 
 
-@DISPATCHER.callback_query(F.data == '/training')
-async def training_handler(callback: CallbackQuery):
-    await callback.message.answer('/training handler message.')
+@DISPATCHER.callback_query(F.data == '/workout')
+async def workout_handler(callback: CallbackQuery):
+    await callback.message.answer('/workout handler message.')
 
 
 @DISPATCHER.callback_query(F.data == '/renew')

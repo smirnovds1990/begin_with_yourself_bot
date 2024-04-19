@@ -1,4 +1,7 @@
+from django.urls import reverse
+
 import asyncio
+import requests as re
 from hashlib import sha256
 from random import choice
 
@@ -12,18 +15,19 @@ from sqlalchemy.ext.asyncio import async_sessionmaker
 from telegram_client.config import BOT, DISPATCHER
 from telegram_client.constants import NOTIFICATIONS
 from telegram_client.db import ENGINE, TelegramUser
-from telegram_client.functions import create_token, get_profile
+from telegram_client.functions import create_token, get_profile, get_token
 
 
 @DISPATCHER.message(Command('start'))
 async def start_message(message: Message):
     row = {
         'username': f'{message.from_user.id}',
-        'password': sha256(f'{message.from_user.id}'.encode()).hexdigest()
+        'password': sha256(f'{message.from_user.id}'.encode()).hexdigest(),
     }
     async_session = async_sessionmaker(ENGINE, expire_on_commit=False)
     query = select(TelegramUser).where(
-        TelegramUser.tg_user_id == message.from_user.id)
+        TelegramUser.tg_user_id == message.from_user.id
+    )
     async with async_session() as session:
         if not (await session.scalars(query)).one_or_none():
             row['token'] = await create_token(row)
@@ -44,6 +48,46 @@ async def start_message(message: Message):
 async def command_register(message: Message, forms: FormsManager):
     await message.answer('Давайте зарегиструемся!')
     await forms.show('registration')
+
+
+@DISPATCHER.message(Command('sleep'))
+async def start_sleep(message: Message):
+    response = re.post(
+        reverse('sleep'),
+        headers={
+            'Authorization': f'Bearer {await get_token(message.from_user.id)}'
+        },
+        timeout=1.5,
+    )
+    await message.answer("Приятных снов!")
+    return response.json()
+
+
+@DISPATCHER.message(Command('wake_up'))
+async def start_wake_up(message: Message):
+    token = await get_token(message.from_user.id)
+    headers = {'Authorization': f'Bearer {token}'}
+    response = re.post(
+        'http://127.0.0.1:8000/api/sleep/',
+        headers=headers,
+        data={'is_sleeping': False},
+        timeout=1.5,
+    )
+    response = re.get(
+        'http://127.0.0.1:8000/api/sleep/last_sleep/',
+        headers=headers,
+        timeout=1.5,
+    )
+    response_data = response.json()
+    sleeping_hours = response_data.get('sleeping_hours')
+    sleep_status = response_data.get('sleep_status')
+    await message.answer(
+        f'Вы спали {sleeping_hours} часов. Это {sleep_status}.'
+    )
+    return response_data
+
+
+API_URL = 'http://your_api_url/'  # Замените на адрес вашего API
 
 
 async def test(chat_id: int):
@@ -73,12 +117,7 @@ async def main():
     scheduler.add_job(test, 'interval', hours=1, args=(117508330,))
     # ОТПРАВКА ВСЕМ ПОЛЬЗОВАТЕЛЯМ РАЗ В 2 ЧАСА РАЗНЫХ СООБЩЕНИЙ
     for user in users:
-        scheduler.add_job(
-            test_2,
-            'interval',
-            hours=2,
-            args=(user, )
-        )
+        scheduler.add_job(test_2, 'interval', hours=2, args=(user,))
     scheduler.start()
     #
     await DISPATCHER.start_polling(BOT)

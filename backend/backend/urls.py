@@ -4,13 +4,9 @@ from django.conf.urls.static import static
 from django.urls import include, path
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from rest_framework import routers, permissions
+from rest_framework import permissions
 
 from profile.views import UserProfileView  # pylint: disable=wrong-import-order
-from sleep.views import SleepViewSet
-
-router = routers.DefaultRouter()
-router.register('sleep', SleepViewSet)
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -35,6 +31,7 @@ urlpatterns = [
         'api/workouts/',
         include('workout.urls')
     ),
+    
     path(
         'swagger<format>/',
         schema_view.without_ui(

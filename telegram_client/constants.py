@@ -60,3 +60,6 @@ NOTIFICATIONS = (
     'НУ ПРАВДА, ПОЗАНИМАЙСЯ УЖЕ!',
     'НЕ ЗАБЫВАЙ СПАТЬ!'
 )
+
+SLEEP_URL = urljoin(BASE_URL, 'api/sleep/')
+LAST_SLEEP_URL = urljoin(SLEEP_URL, 'last_sleep/')

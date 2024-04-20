@@ -7,12 +7,12 @@ from sleep.constants import (
     MAX_SLEEPING_HOURS_FRONTIER,
     BAD_SLEEP_MESSAGE,
     GOOD_SLEEP_MESSAGE,
-    GREAT_SLEEP_MESSAGE
+    GREAT_SLEEP_MESSAGE,
 )
 
-SLEEP_NOT_FOUND_MESSAGE = 'Sleep not found'
-NOT_WAKE_UP_MESSAGE = 'User did not wake up'
-NOT_START_SLEEPING_MESSAGE = 'User did not start sleeping'
+SLEEP_NOT_FOUND_MESSAGE = 'Сон не найден'
+NOT_WAKE_UP_MESSAGE = 'Вы не нажимали кнопку "Проснуться"'
+NOT_START_SLEEPING_MESSAGE = 'Вы не нажимали кнопку "Ложусь спать"'
 
 User = get_user_model()
 
@@ -43,9 +43,12 @@ class Sleep(models.Model):
             return (0, SLEEP_NOT_FOUND_MESSAGE)
         if last_sleep.is_sleeping:
             return (0, NOT_WAKE_UP_MESSAGE)
-        prelast_sleep = Sleep.objects.filter(client=user).order_by(
-            '-sleep_time'
-        )[1]
+        try:
+            prelast_sleep = Sleep.objects.filter(client=user).order_by(
+                '-sleep_time'
+            )[1]
+        except IndexError:
+            return (0, NOT_WAKE_UP_MESSAGE)
         if not prelast_sleep.is_sleeping:
             return (0, NOT_START_SLEEPING_MESSAGE)
         hours = round(

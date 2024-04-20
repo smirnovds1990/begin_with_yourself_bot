@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import BigInteger, Column, Integer, String
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import DeclarativeBase, declared_attr
 
@@ -19,5 +19,5 @@ class Base(DeclarativeBase):
 class TelegramUser(Base):
     username = Column(String(MAX_NAME_LENGTH), nullable=False)
     password = Column(String(TOKEN_LENGTH), nullable=False)
-    tg_user_id = Column(Integer, nullable=False)
+    tg_user_id = Column(BigInteger, nullable=False)
     token = Column(String(TOKEN_LENGTH), nullable=False)

@@ -9,7 +9,8 @@ load_dotenv()
 BASE_URL = 'http://127.0.0.1:8000/'
 LOGIN_URL = urljoin(BASE_URL, 'auth/users/')
 TOKEN_URL = urljoin(BASE_URL, 'auth/jwt/create/')
-PROFILE_URL = urljoin(BASE_URL, 'auth/users/me/')
+USER_URL = urljoin(BASE_URL, 'auth/users/me/')
+PROFILE_URL = urljoin(BASE_URL, 'profile/')
 NUTRITION_URL = urljoin(BASE_URL, 'api/nutrition/')
 
 NAMES_PATTERN = r'[А-Яа-я]'
@@ -42,11 +43,11 @@ SEX_CHOICES = (
 )
 
 ACTIVITY_CHOICES = (
-    ('sedentary', 'Сидячий образ жизни'),
-    ('light', 'Тренировки 1-3 раза в неделю'),
-    ('moderate', 'Тренировки 3-5 раз в неделю'),
-    ('intensive', 'Тренировки 6-7 раз в неделю'),
-    ('athlete', 'Тренировки каждый день чаще чем раз в день'),
+    ('sedentary', 'Сидячий образ жизни 🪑'),
+    ('light', 'Тренировки 1-3 раза в неделю 🏃'),
+    ('moderate', 'Тренировки 3-5 раз в неделю 🤸'),
+    ('intensive', 'Тренировки 6-7 раз в неделю 🏋️‍♀️'),
+    ('athlete', 'Тренировки каждый день чаще чем раз в день 🏋️‍♂️'),
 )
 
 AIM_CHOICES = (

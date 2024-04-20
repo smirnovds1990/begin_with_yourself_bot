@@ -97,15 +97,8 @@ async def command_register(message: Message, forms: FormsManager):
 
 @DISPATCHER.message(Command('nutrition'))
 async def nutrilon_command(message: Message):
-    token = await get_token(message.from_user.id)
-    headers = {
-        'Authorization': f'Bearer {token}'
-    }
-    nutrition = re.get(
-        NUTRITION_URL,
-        headers=headers,
-        timeout=5
-    ).json()
+    user_token = await get_token(message.from_user.id)
+    nutrition = await backend_get(NUTRITION_URL, user_token).json()
     answer = (
         f'Норма каллорий в день = {nutrition["calories_norm"]}\n'
         f'Норма белков в день = {nutrition["protein"]}\n'

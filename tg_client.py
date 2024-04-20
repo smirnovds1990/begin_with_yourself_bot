@@ -2,7 +2,6 @@ import asyncio
 from hashlib import sha256
 from http import HTTPStatus
 from random import choice
-import requests as re
 
 from aiogram import F
 from aiogram.filters.command import Command

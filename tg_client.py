@@ -13,7 +13,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import async_sessionmaker
 
 from telegram_client.config import BOT, DISPATCHER, get_keyboard
-from telegram_client.constants import NOTIFICATIONS, PROFILE_URL
+from telegram_client.constants import NOTIFICATIONS, NUTRITION_URL, PROFILE_URL
 from telegram_client.db import ENGINE, TelegramUser
 from telegram_client.functions import backend_get, create_token, get_token
 
@@ -46,8 +46,8 @@ async def start_message(message: Message):
 
 
 @DISPATCHER.callback_query(F.data == '/nutrition')
-async def nutrilon_handler(callback: CallbackQuery):
-    await callback.message.answer('/nutrition handler message.')
+async def nutrilon_handler_query(callback: CallbackQuery):
+    await callback.message.answer(await nutrilon_handler(id=callback.from_user.id))
 
 
 @DISPATCHER.callback_query(F.data == '/sleep')
@@ -96,8 +96,12 @@ async def command_register(message: Message, forms: FormsManager):
 
 
 @DISPATCHER.message(Command('nutrition'))
-async def nutrilon_handler(message: Message):
-    token = await get_token(message.from_user.id)
+async def nutrilon_handler(message: Message = None, id=None):
+    if id:
+        user_id = id
+    else:
+        user_id = message.from_user.id
+    token = await get_token(user_id)
     headers = {
         'Authorization': f'Bearer {token}'
     }
@@ -112,6 +116,8 @@ async def nutrilon_handler(message: Message):
         f'Норма жиров в день = {nutrition["fat"]}\n'
         f'Норма углеводов в день = {nutrition["protein"]}\n'
     )
+    if id:
+        return answer
     await message.answer(answer)
 
 

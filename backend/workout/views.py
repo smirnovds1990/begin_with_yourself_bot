@@ -69,8 +69,8 @@ class WorkoutTypeDetail(APIView):
     Получение типа тренировок по id
     '''
 
-    def get(self, request, id):
-        workout_type = get_object_or_404(WorkoutType, id=id)
+    def get(self, request, pk):  # pylint: disable=unused-argument
+        workout_type = get_object_or_404(WorkoutType, id=pk)
         serializer = WorkoutTypeSerializer(workout_type)
         return Response(serializer.data)
 
@@ -151,7 +151,7 @@ class AvailableWorkoutTypesView(BaseUserWorkoutProgramView):
 
 
 class WorkoutDetailView(APIView):
-    def get(self, request, pk):
+    def get(self, request, pk):  # pylint: disable=unused-argument
         '''
         Получение данных конкретной тренировки
         '''

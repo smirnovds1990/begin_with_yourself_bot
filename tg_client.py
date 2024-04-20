@@ -182,7 +182,7 @@ async def workout_session_handler(callback: CallbackQuery):
                 urljoin(WORKOUT_SESSION_URL, str(workouts[0]['id'])),
                 user_token)
             if delete.status == HTTPStatus.NO_CONTENT:
-                time = (str(datetime.now() - time)).split('.')[0]
+                time = str(datetime.now() - time).split('.', maxsplit=1)[0]
                 await callback.message.answer(
                     'Фух😮‍💨\nУпражнение закончили за '
                     f'{time}.\nПродолжим тренироваться или пойдем поедим? 😉',

@@ -11,7 +11,6 @@ LOGIN_URL = urljoin(BASE_URL, 'auth/users/')
 TOKEN_URL = urljoin(BASE_URL, 'auth/jwt/create/')
 USER_URL = urljoin(BASE_URL, 'auth/users/me/')
 PROFILE_URL = urljoin(BASE_URL, 'profile/')
-NUTRITION_URL = urljoin(BASE_URL, 'api/nutrition/')
 
 NAMES_PATTERN = r'[А-Яа-я]'
 WIGHT_PATTERN = r'^[0-9]{2,3}?\.?[0-9]{0,2}$'

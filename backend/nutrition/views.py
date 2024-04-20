@@ -8,12 +8,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .constants import (ACTIVITY_MODIFIERS,
-                        CALORIES_PROTEIN,
-                        CALORIES_SUPPLEMENT,
-                        CALORIES_FAT,
-                        COEFFICIENT_PROTEIN,
-                        COEFFICIENT_SUPPLEMENT,
-                        COEFFICIENT_FAT,
                         GENDER_MODIFIERS,
                         GOAL_MODIFIERS)
 
@@ -39,21 +33,5 @@ class CalorieNormView(APIView):
 
         calories *= activity_modifier
         calories *= goal_modifier
-        calories = round(calories)
 
-        protein = round(
-            calories * COEFFICIENT_PROTEIN / CALORIES_PROTEIN
-        )
-        fat = round(
-            calories * COEFFICIENT_FAT / CALORIES_FAT
-        )
-        supplement = round(
-            calories * COEFFICIENT_SUPPLEMENT / CALORIES_SUPPLEMENT
-        )
-
-        return Response({
-            'calories_norm': calories,
-            'protein': protein,
-            'fat': fat,
-            'supplement': supplement
-        })
+        return Response({'calories_norm': calories})

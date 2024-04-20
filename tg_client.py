@@ -98,9 +98,9 @@ async def command_register(message: Message, forms: FormsManager):
 
 
 @DISPATCHER.message(Command('nutrition'))
-async def nutrilon_handler(message: Message = None, id=None):
-    if id:
-        user_id = id
+async def nutrilon_handler(message: Message = None, callback_query_id=None):
+    if callback_query_id:
+        user_id = callback_query_id
     else:
         user_id = message.from_user.id
     token = await get_token(user_id)
@@ -118,7 +118,7 @@ async def nutrilon_handler(message: Message = None, id=None):
         f'Норма жиров в день = {nutrition["fat"]}\n'
         f'Норма углеводов в день = {nutrition["protein"]}\n'
     )
-    if id:
+    if callback_query_id:
         return answer
     await message.answer(answer)
 

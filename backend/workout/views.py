@@ -4,21 +4,17 @@ from django.shortcuts import get_object_or_404
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import (UserWorkoutSession,
-                     Workout,
-                     WorkoutType,
-                     WorkoutProgram,
-                     WorkoutProgramDetail)
-from .serializers import (UserWorkoutSessionSerializer,
-                          WorkoutSerializer,
-                          WorkoutTypeSerializer,
-                          WorkoutProgramSerializer)
 from .filters import WorkoutTypeFilter
+from .models import (UserWorkoutSession, Workout, WorkoutProgram,
+                     WorkoutProgramDetail, WorkoutType)
+from .serializers import (UserWorkoutSessionSerializer,
+                          WorkoutProgramSerializer, WorkoutSerializer,
+                          WorkoutTypeSerializer)
 
 
 class WorkoutTypeList(APIView):
@@ -73,8 +69,8 @@ class WorkoutTypeDetail(APIView):
     Получение типа тренировок по id
     '''
 
-    def get(self, pk):
-        workout_type = get_object_or_404(WorkoutType, id=pk)
+    def get(self, request, id):
+        workout_type = get_object_or_404(WorkoutType, id=id)
         serializer = WorkoutTypeSerializer(workout_type)
         return Response(serializer.data)
 
@@ -155,7 +151,7 @@ class AvailableWorkoutTypesView(BaseUserWorkoutProgramView):
 
 
 class WorkoutDetailView(APIView):
-    def get(self, pk):
+    def get(self, request, pk):
         '''
         Получение данных конкретной тренировки
         '''

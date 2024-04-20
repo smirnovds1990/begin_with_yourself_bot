@@ -1,11 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-
-from sleep.constants import (
-    GOOD_SLEEP_FRONTIER,
-    GREAT_SLEEP_FRONTIER,
-    MAX_SLEEPING_HOURS_FRONTIER,
-)
+from sleep.constants import (GOOD_SLEEP_FRONTIER, GREAT_SLEEP_FRONTIER,
+                             MAX_SLEEPING_HOURS_FRONTIER)
 
 BAD_SLEEP_MESSAGE = 'мало'
 GOOD_SLEEP_MESSAGE = 'хорошо'

@@ -1,12 +1,12 @@
-from django.contrib import admin
+from profile.views import UserProfileView  # pylint: disable=wrong-import-order
+
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib import admin
 from django.urls import include, path
-from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from rest_framework import routers, permissions
-
-from profile.views import UserProfileView  # pylint: disable=wrong-import-order
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions, routers
 from sleep.views import SleepViewSet
 
 router = routers.DefaultRouter()

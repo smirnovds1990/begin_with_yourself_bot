@@ -1,5 +1,4 @@
 from django.urls import path
-
 from sleep.views import get_last_sleep
 
 urlpatterns = [

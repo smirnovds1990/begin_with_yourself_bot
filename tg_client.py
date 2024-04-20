@@ -2,6 +2,7 @@ import asyncio
 from hashlib import sha256
 from http import HTTPStatus
 from random import choice
+import requests as re
 
 from aiogram import F
 from aiogram.filters.command import Command
@@ -12,7 +13,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import async_sessionmaker
 
 from telegram_client.config import BOT, DISPATCHER, get_keyboard
-from telegram_client.constants import NOTIFICATIONS, PROFILE_URL
+from telegram_client.constants import NOTIFICATIONS, NUTRITION_URL, PROFILE_URL
 from telegram_client.db import ENGINE, TelegramUser
 from telegram_client.functions import backend_get, create_token, get_token
 
@@ -45,7 +46,7 @@ async def start_message(message: Message):
 
 
 @DISPATCHER.callback_query(F.data == '/nutrition')
-async def nutrilon_handler(callback: CallbackQuery):
+async def nutrilon_handler_query(callback: CallbackQuery):
     await callback.message.answer('/nutrition handler message.')
 
 
@@ -92,6 +93,26 @@ async def command_register(message: Message, forms: FormsManager):
         await message.answer(
             'Кажется, что-то пошло не так.\n'
             'Попробуйте еще раз или подойдите позже.')
+
+
+@DISPATCHER.message(Command('nutrition'))
+async def nutrilon_handler(message: Message):
+    token = await get_token(message.from_user.id)
+    headers = {
+        'Authorization': f'Bearer {token}'
+    }
+    nutrition = re.get(
+        NUTRITION_URL,
+        headers=headers,
+        timeout=5
+    ).json()
+    answer = (
+        f'Норма каллорий в день = {nutrition["calories_norm"]}\n'
+        f'Норма белков в день = {nutrition["protein"]}\n'
+        f'Норма жиров в день = {nutrition["fat"]}\n'
+        f'Норма углеводов в день = {nutrition["protein"]}\n'
+    )
+    await message.answer(answer)
 
 
 async def test(chat_id: int):

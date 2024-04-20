@@ -47,9 +47,7 @@ async def start_message(message: Message):
 
 @DISPATCHER.callback_query(F.data == '/nutrition')
 async def nutrilon_handler_query(callback: CallbackQuery):
-    await callback.message.answer(
-        await nutrilon_handler(id=callback.from_user.id)
-    )
+    await callback.message.answer('/nutrition handler message.')
 
 
 @DISPATCHER.callback_query(F.data == '/sleep')
@@ -98,12 +96,8 @@ async def command_register(message: Message, forms: FormsManager):
 
 
 @DISPATCHER.message(Command('nutrition'))
-async def nutrilon_handler(message: Message = None, callback_query_id=None):
-    if callback_query_id:
-        user_id = callback_query_id
-    else:
-        user_id = message.from_user.id
-    token = await get_token(user_id)
+async def nutrilon_handler(message: Message):
+    token = await get_token(message.from_user.id)
     headers = {
         'Authorization': f'Bearer {token}'
     }
@@ -118,8 +112,6 @@ async def nutrilon_handler(message: Message = None, callback_query_id=None):
         f'Норма жиров в день = {nutrition["fat"]}\n'
         f'Норма углеводов в день = {nutrition["protein"]}\n'
     )
-    if callback_query_id:
-        return answer
     await message.answer(answer)
 
 

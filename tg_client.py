@@ -1,18 +1,20 @@
 import asyncio
 from hashlib import sha256
+from http import HTTPStatus
 from random import choice
 
+from aiogram import F
 from aiogram.filters.command import Command
-from aiogram.types import Message
+from aiogram.types import CallbackQuery, Message
 from aiogram_forms import FormsManager
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import async_sessionmaker
 
-from telegram_client.config import BOT, DISPATCHER
-from telegram_client.constants import NOTIFICATIONS
+from telegram_client.config import BOT, DISPATCHER, get_keyboard
+from telegram_client.constants import NOTIFICATIONS, PROFILE_URL
 from telegram_client.db import ENGINE, TelegramUser
-from telegram_client.functions import create_token, get_profile
+from telegram_client.functions import backend_get, create_token, get_token
 
 
 @DISPATCHER.message(Command('start'))
@@ -33,17 +35,63 @@ async def start_message(message: Message):
             await message.answer(
                 'Приветствую! Вы прошли начальную регистрацию.\n'
                 'Здесь должно быть большое описание, '
-                'но пока в процессе разработки :)\n'
+                'но пока в процессе разработки 😏\n'
                 'Зарегистроваться: /register'
             )
         else:
-            await message.answer('Вы уже прошли начальную регистрацию :)')
+            await message.answer(
+                'Вы уже прошли начальную регистрацию 😏\n'
+                'Продолжить: /register')
+
+
+@DISPATCHER.callback_query(F.data == '/nutrition')
+async def nutrilon_handler(callback: CallbackQuery):
+    await callback.message.answer('/nutrition handler message.')
+
+
+@DISPATCHER.callback_query(F.data == '/sleep')
+async def sleep_handler(callback: CallbackQuery):
+    await callback.message.answer('/sleep handler message.')
+
+
+@DISPATCHER.callback_query(F.data == '/workout')
+async def workout_handler(callback: CallbackQuery):
+    await callback.message.answer('/workout handler message.')
+
+
+@DISPATCHER.callback_query(F.data == '/renew')
+async def renew_handler(callback: CallbackQuery):
+    await callback.message.answer(
+        'Для обновления ваших данных вызовите \n/renew 😏')
+
+
+@DISPATCHER.message(Command('renew'))
+async def command_renew(message: Message, forms: FormsManager):
+    await message.answer('Давайте зафиксируем ваши данные.')
+    await forms.show('training')
 
 
 @DISPATCHER.message(Command('register'))
 async def command_register(message: Message, forms: FormsManager):
-    await message.answer('Давайте зарегиструемся!')
-    await forms.show('registration')
+    user_token = await get_token(message.from_user.id)
+    status = await backend_get(PROFILE_URL, user_token)
+    if not isinstance(status, dict):
+        if status.status_code == HTTPStatus.OK:
+            await message.answer(
+                'Вы уже зарегистированы. '
+                'Вероятно, кнопки ниже могут вам помочь 🤫',
+                reply_markup=get_keyboard())
+        elif status.status_code == HTTPStatus.NOT_FOUND:
+            await message.answer('Давайте зарегиструемся!')
+            await forms.show('registration')
+        else:
+            await message.answer(
+                'Кажется, что-то пошло не так.\n'
+                'Попробуйте еще раз или подойдите позже.')
+    else:
+        await message.answer(
+            'Кажется, что-то пошло не так.\n'
+            'Попробуйте еще раз или подойдите позже.')
 
 
 async def test(chat_id: int):
@@ -57,15 +105,14 @@ async def test_2(user: TelegramUser):
     '''
     Тестовая функция для отправки индивидуальных сообщений ботом.
     '''
-    # ЗАГЛУШКА. PROFILE НЕТ. БЕРЕМ USERNAME ИЗ AUTH
-    name = (await get_profile(user.token))['username']
-    #
-    message = f'Вам, {name}, пора позаниматься!'
-    await BOT.send_message(user.tg_user_id, message)
+    data = await backend_get(PROFILE_URL, user.token)
+    if not isinstance(data, dict):
+        name = data.json()['name']
+        message = f'Вам, {name}, пора позаниматься!'
+        await BOT.send_message(user.tg_user_id, message)
 
 
 async def main():
-    # ТЕСТИРОВАНИЕ ШЕДУЛЕРА
     scheduler = AsyncIOScheduler()
     async with async_sessionmaker(ENGINE, expire_on_commit=False)() as session:
         users = (await session.scalars(select(TelegramUser))).all()
@@ -73,14 +120,8 @@ async def main():
     scheduler.add_job(test, 'interval', hours=1, args=(117508330,))
     # ОТПРАВКА ВСЕМ ПОЛЬЗОВАТЕЛЯМ РАЗ В 2 ЧАСА РАЗНЫХ СООБЩЕНИЙ
     for user in users:
-        scheduler.add_job(
-            test_2,
-            'interval',
-            hours=2,
-            args=(user, )
-        )
+        scheduler.add_job(test_2, 'interval', hours=2, args=(user, ))
     scheduler.start()
-    #
     await DISPATCHER.start_polling(BOT)
 
 

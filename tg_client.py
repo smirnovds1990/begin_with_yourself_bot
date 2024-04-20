@@ -47,7 +47,9 @@ async def start_message(message: Message):
 
 @DISPATCHER.callback_query(F.data == '/nutrition')
 async def nutrilon_handler_query(callback: CallbackQuery):
-    await callback.message.answer(await nutrilon_handler(id=callback.from_user.id))
+    await callback.message.answer(
+        await nutrilon_handler(id=callback.from_user.id)
+    )
 
 
 @DISPATCHER.callback_query(F.data == '/sleep')

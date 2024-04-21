@@ -7,10 +7,8 @@ from drf_yasg import openapi
 from rest_framework import routers, permissions
 
 from profile.views import UserProfileView  # pylint: disable=wrong-import-order
-from sleep.views import SleepViewSet
 
 router = routers.DefaultRouter()
-router.register('sleep', SleepViewSet)
 
 schema_view = get_schema_view(
     openapi.Info(

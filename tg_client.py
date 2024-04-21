@@ -14,7 +14,13 @@ from sqlalchemy.ext.asyncio import async_sessionmaker
 from telegram_client.config import BOT, DISPATCHER, get_keyboard
 from telegram_client.constants import NOTIFICATIONS, NUTRITION_URL, PROFILE_URL
 from telegram_client.db import ENGINE, TelegramUser
-from telegram_client.functions import backend_get, create_token, get_token
+from telegram_client.functions import (
+    backend_get,
+    create_token,
+    get_token,
+    create_sleep,
+    get_last_sleep,
+)
 
 
 @DISPATCHER.message(Command('start'))
@@ -45,7 +51,7 @@ async def start_message(message: Message):
 
 
 @DISPATCHER.callback_query(F.data == '/nutrition')
-async def nutrilon_handler(callback: CallbackQuery):
+async def nutrition_handler(callback: CallbackQuery):
     await callback.message.answer('/nutrition handler message.')
 
 
@@ -95,17 +101,34 @@ async def command_register(message: Message, forms: FormsManager):
 
 
 @DISPATCHER.message(Command('nutrition'))
-async def nutrilon_command(message: Message):
+async def nutrition_command(message: Message):
     user_token = await get_token(message.from_user.id)
     nutrition = await backend_get(NUTRITION_URL, user_token)
     nutrition = nutrition.json()
     answer = (
-        f'Норма каллорий в день = {nutrition["calories_norm"]}\n'
+        f'Норма калорий в день = {nutrition["calories_norm"]}\n'
         f'Норма белков в день = {nutrition["protein"]}\n'
         f'Норма жиров в день = {nutrition["fat"]}\n'
         f'Норма углеводов в день = {nutrition["protein"]}\n'
     )
     await message.answer(answer)
+
+
+@DISPATCHER.message(Command('sleep'))
+async def start_sleep(message: Message):
+    """Обработчик события /sleep."""
+    await create_sleep(message.from_user.id)
+    await message.answer("Приятных снов!")
+
+
+@DISPATCHER.message(Command('wake_up'))
+async def start_wake_up(message: Message):
+    """Обработчик события /wake_up."""
+    await create_sleep(message.from_user.id, is_sleeping=False)
+    response = await get_last_sleep(message.from_user.id)
+    sleeping_hours = response.get('sleeping_hours')
+    sleep_status = response.get('sleep_status')
+    await message.answer(f'Вы спали {sleeping_hours} часов. {sleep_status}.')
 
 
 async def test(chat_id: int):

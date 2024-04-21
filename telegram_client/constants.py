@@ -6,7 +6,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-BASE_URL = 'http://127.0.0.1:8000/'
+BACKEND_HOST = getenv('BACKEND_HOST', '127.0.0.1')
+BASE_URL = f'http://{BACKEND_HOST}:8000/'
 LOGIN_URL = urljoin(BASE_URL, 'auth/users/')
 TOKEN_URL = urljoin(BASE_URL, 'auth/jwt/create/')
 USER_URL = urljoin(BASE_URL, 'auth/users/me/')

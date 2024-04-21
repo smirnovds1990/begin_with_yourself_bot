@@ -80,8 +80,9 @@ Go to http://localhost:8000/
 ## Run Telegram client in Docker
 
 set in .env:
-DB_HOST=telegram_db
-DB_PORT=5432
+- DB_HOST=telegram_db
+- DB_PORT=5432
+- BACKEND_HOST=nginx
 
 ```bash
 cd begin_with_yourself_bot_3/

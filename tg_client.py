@@ -58,6 +58,7 @@ async def nutrition_handler(callback: CallbackQuery):
 @DISPATCHER.callback_query(F.data == '/sleep')
 async def sleep_handler(callback: CallbackQuery):
     await callback.message.answer('/sleep handler message.')
+    await callback.message.answer('/wake_up handler message.')
 
 
 @DISPATCHER.callback_query(F.data == '/workout')

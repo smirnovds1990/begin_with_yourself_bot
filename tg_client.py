@@ -15,7 +15,8 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import async_sessionmaker
 
 from telegram_client.config import BOT, DISPATCHER, get_keyboard
-from telegram_client.constants import (BASE_URL, NOTIFICATIONS, PROFILE_URL,
+from telegram_client.constants import (BASE_URL, LAST_SLEEP_URL, NOTIFICATIONS,
+                                       NUTRITION_URL, PROFILE_URL, SLEEP_URL,
                                        WORKOUT_SESSION_URL, WORKOUT_URL,
                                        WORKOUT_USER_URL)
 from telegram_client.db import ENGINE, TelegramUser
@@ -51,15 +52,60 @@ async def start_message(message: Message):
 
 
 @DISPATCHER.callback_query(F.data == '/nutrition')
-async def nutrilon_handler(callback: CallbackQuery):
-    await callback.message.answer(
-        'Callback `nutrition` function.')
+async def nutrition_handler(callback: CallbackQuery):
+    user_token = await get_token(callback.from_user.id)
+    nutrition = await backend_get(NUTRITION_URL, user_token)
+    if not isinstance(nutrition, dict):
+        nutrition = await nutrition.json()
+        answer = (
+            f'Норма калорий в день = {nutrition["calories_norm"]}\n'
+            f'Норма белков в день = {nutrition["protein"]}\n'
+            f'Норма жиров в день = {nutrition["fat"]}\n'
+            f'Норма углеводов в день = {nutrition["protein"]}\n'
+        )
+        await callback.message.answer(answer)
+    else:
+        await callback.message.answer(
+            'Кажется, что-то пошло не так.\n'
+            'Попробуйте еще раз или подойдите позже.')
 
 
 @DISPATCHER.callback_query(F.data == '/sleep')
 async def sleep_handler(callback: CallbackQuery):
-    await callback.message.answer(
-        'Callback `sleep` function.')
+    user_token = await get_token(callback.from_user.id)
+    last_sleep = await backend_post(
+        SLEEP_URL, user_token, {'is_sleeping': True})
+    if last_sleep.status == HTTPStatus.CREATED:
+        button = [
+            [InlineKeyboardButton(
+                text='Проснуться',
+                callback_data='/wakeup'
+            )]
+        ]
+        await callback.message.answer(
+            'Приятных снов!',
+            reply_markup=InlineKeyboardMarkup(inline_keyboard=button)
+        )
+    else:
+        await callback.message.answer(
+            'Кажется, что-то пошло не так.\n'
+            'Попробуйте еще раз или подойдите позже.')
+
+
+@DISPATCHER.callback_query(F.data == '/wakeup')
+async def wakeup_handler(callback: CallbackQuery):
+    user_token = await get_token(callback.from_user.id)
+    stop = await backend_post(
+        SLEEP_URL, user_token, {'is_sleeping': False})
+    if not isinstance(stop, dict):
+        last_sleep = await backend_get(LAST_SLEEP_URL, user_token)
+        if not isinstance(last_sleep, dict):
+            last_sleep = await last_sleep.json()
+            await callback.message.answer(
+                f'Вы спали {last_sleep["sleeping_hours"]} часов. \n'
+                f'{last_sleep["sleep_status"]}.\nЧем займемся? 😉',
+                reply_markup=get_keyboard()
+            )
 
 
 @DISPATCHER.callback_query(F.data == '/workout')

@@ -12,7 +12,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import async_sessionmaker
 
 from telegram_client.config import BOT, DISPATCHER, get_keyboard
-from telegram_client.constants import NOTIFICATIONS, PROFILE_URL
+from telegram_client.constants import NOTIFICATIONS, NUTRITION_URL, PROFILE_URL
 from telegram_client.db import ENGINE, TelegramUser
 from telegram_client.functions import (
     backend_get,
@@ -51,7 +51,7 @@ async def start_message(message: Message):
 
 
 @DISPATCHER.callback_query(F.data == '/nutrition')
-async def nutrilon_handler(callback: CallbackQuery):
+async def nutrition_handler(callback: CallbackQuery):
     await callback.message.answer('/nutrition handler message.')
 
 
@@ -98,6 +98,20 @@ async def command_register(message: Message, forms: FormsManager):
         await message.answer(
             'Кажется, что-то пошло не так.\n'
             'Попробуйте еще раз или подойдите позже.')
+
+
+@DISPATCHER.message(Command('nutrition'))
+async def nutrition_command(message: Message):
+    user_token = await get_token(message.from_user.id)
+    nutrition = await backend_get(NUTRITION_URL, user_token)
+    nutrition = nutrition.json()
+    answer = (
+        f'Норма калорий в день = {nutrition["calories_norm"]}\n'
+        f'Норма белков в день = {nutrition["protein"]}\n'
+        f'Норма жиров в день = {nutrition["fat"]}\n'
+        f'Норма углеводов в день = {nutrition["protein"]}\n'
+    )
+    await message.answer(answer)
 
 
 @DISPATCHER.message(Command('sleep'))

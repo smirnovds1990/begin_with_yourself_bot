@@ -165,4 +165,8 @@ SWAGGER_SETTINGS = {
     'USE_SESSION_AUTH': False,
 }
 
-CSRF_TRUSTED_ORIGINS = ["http://localhost:8000"]
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:8000",
+    'http://127.0.0.1:8000',
+    'http://51.250.16.44:8000',
+]

@@ -1,14 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-
-from sleep.constants import (
-    GOOD_SLEEP_FRONTIER,
-    GREAT_SLEEP_FRONTIER,
-    MAX_SLEEPING_HOURS_FRONTIER,
-    BAD_SLEEP_MESSAGE,
-    GOOD_SLEEP_MESSAGE,
-    GREAT_SLEEP_MESSAGE,
-)
+from sleep.constants import (BAD_SLEEP_MESSAGE, GOOD_SLEEP_FRONTIER,
+                             GOOD_SLEEP_MESSAGE, GREAT_SLEEP_FRONTIER,
+                             GREAT_SLEEP_MESSAGE, MAX_SLEEPING_HOURS_FRONTIER)
 
 SLEEP_NOT_FOUND_MESSAGE = 'Сон не найден'
 NOT_WAKE_UP_MESSAGE = 'Вы не нажимали кнопку "Проснуться"'

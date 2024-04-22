@@ -1,9 +1,8 @@
-from profile.constants import (SEX_CHOICES,
-                               AIM_CHOICES)
+from profile.constants import AIM_CHOICES, SEX_CHOICES
 
-from django.db import models
-from django.core.validators import MinValueValidator
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator
+from django.db import models
 
 from .validators import validate_video_extension
 

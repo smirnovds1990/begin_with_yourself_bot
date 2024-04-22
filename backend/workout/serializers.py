@@ -1,9 +1,7 @@
 from rest_framework import serializers
-from .models import (UserWorkoutSession,
-                     Workout,
-                     WorkoutType,
-                     WorkoutProgram,
-                     WorkoutProgramDetail)
+
+from .models import (UserWorkoutSession, Workout, WorkoutProgram,
+                     WorkoutProgramDetail, WorkoutType)
 
 
 class WorkoutTypeSerializer(serializers.ModelSerializer):

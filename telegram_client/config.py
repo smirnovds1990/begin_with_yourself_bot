@@ -2,7 +2,7 @@ from http import HTTPStatus
 from os import getenv
 
 from aiogram import Bot, Dispatcher
-from aiogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from aiogram_forms import Form, FormsManager
 from aiogram_forms import dispatcher as dpf
 from aiogram_forms import fields
@@ -25,20 +25,12 @@ DISPATCHER = Dispatcher()
 
 def get_keyboard() -> InlineKeyboardMarkup:
     buttons = [
-        InlineKeyboardButton(
-            text='Питание',
-            callback_data='/nutrition'),
-        InlineKeyboardButton(
-            text='Сон',
-            callback_data='/sleep'),
-        InlineKeyboardButton(
-            text='Тренировка',
-            callback_data='/workout'),
-        InlineKeyboardButton(
-            text='Обновить',
-            callback_data='/renew'),
+        [InlineKeyboardButton(text='Питание', callback_data='/nutrition'),
+         InlineKeyboardButton(text='Сон', callback_data='/sleep'),
+         InlineKeyboardButton(text='Тренировка', callback_data='/workout')],
+        [InlineKeyboardButton(text='Обновить данные', callback_data='/renew')],
     ]
-    return InlineKeyboardMarkup(inline_keyboard=[buttons])
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
 
 
 @dpf.register('training')
@@ -70,7 +62,7 @@ class TrainingForm(Form):
                 'Кажется, что-то пошло не так.\n'
                 'Попробуйте еще раз или подойдите позже.')
         else:
-            user_data['user'] = user_id.json()['id']
+            user_data['user'] = (await user_id.json())['id']
             await patch_profile(user_token, user_data)
             await message.answer(
                 'Отлично! Я зафиксировал данные 😏',
@@ -125,9 +117,9 @@ class RegisterForm(Form):
                 'Кажется, что-то пошло не так.\n'
                 'Попробуйте еще раз или подойдите позже.')
         else:
-            user_data['user'] = user_id.json()['id']
+            user_data['user'] = (await user_id.json())['id']
             status = (await backend_post(
-                PROFILE_URL, user_token, user_data)).status_code
+                PROFILE_URL, user_token, user_data)).status
             if status == HTTPStatus.CREATED:
                 await message.answer(
                     f'Поздравляю, {form_data["name"]}!🥳\nВы зарегистрированы!')

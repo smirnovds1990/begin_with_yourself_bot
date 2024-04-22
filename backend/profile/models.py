@@ -1,9 +1,7 @@
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
 
-from .constants import (SEX_CHOICES,
-                        ACTIVITY_CHOICES,
-                        AIM_CHOICES)
+from .constants import ACTIVITY_CHOICES, AIM_CHOICES, SEX_CHOICES
 
 
 class UserProfile(models.Model):

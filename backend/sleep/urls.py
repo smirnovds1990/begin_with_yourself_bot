@@ -1,6 +1,5 @@
 from django.urls import include, path
 from rest_framework import routers
-
 from sleep.views import SleepViewSet, get_last_sleep
 
 router = routers.DefaultRouter()

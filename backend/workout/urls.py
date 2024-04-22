@@ -1,12 +1,10 @@
 from django.urls import path
-from .views import (AvailableWorkoutTypesView,
-                    SessionAvailableWorkoutView,
-                    WorkoutSessionListCreateAPIView,
+
+from .views import (AvailableWorkoutTypesView, SessionAvailableWorkoutView,
+                    UserWorkoutProgramView, WorkoutDetailView,
                     WorkoutSessionDetailAPIView,
-                    UserWorkoutProgramView,
-                    WorkoutDetailView,
-                    WorkoutTypeList,
-                    WorkoutTypeDetail)
+                    WorkoutSessionListCreateAPIView, WorkoutTypeDetail,
+                    WorkoutTypeList)
 
 urlpatterns = [
     path(
@@ -15,7 +13,7 @@ urlpatterns = [
         name='workout-type-list'
     ),
     path(
-        'workout_types/<int:id>/',
+        'workout_types/<int:pk>/',
         WorkoutTypeDetail.as_view(),
         name='workout-type-detail'
     ),

@@ -1,21 +1,15 @@
 from datetime import date
-
 from profile.models import UserProfile
 
 from django.shortcuts import get_object_or_404
-from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from .constants import (ACTIVITY_MODIFIERS,
-                        CALORIES_PROTEIN,
-                        CALORIES_SUPPLEMENT,
-                        CALORIES_FAT,
-                        COEFFICIENT_PROTEIN,
-                        COEFFICIENT_SUPPLEMENT,
-                        COEFFICIENT_FAT,
-                        GENDER_MODIFIERS,
-                        GOAL_MODIFIERS)
+from .constants import (ACTIVITY_MODIFIERS, CALORIES_FAT, CALORIES_PROTEIN,
+                        CALORIES_SUPPLEMENT, COEFFICIENT_FAT,
+                        COEFFICIENT_PROTEIN, COEFFICIENT_SUPPLEMENT,
+                        GENDER_MODIFIERS, GOAL_MODIFIERS)
 
 
 class CalorieNormView(APIView):

@@ -12,7 +12,12 @@ LOGIN_URL = urljoin(BASE_URL, 'auth/users/')
 TOKEN_URL = urljoin(BASE_URL, 'auth/jwt/create/')
 USER_URL = urljoin(BASE_URL, 'auth/users/me/')
 PROFILE_URL = urljoin(BASE_URL, 'profile/')
+WORKOUT_URL = urljoin(BASE_URL, 'api/workouts/')
+WORKOUT_USER_URL = urljoin(WORKOUT_URL, 'user_workout_program/')
+WORKOUT_SESSION_URL = urljoin(WORKOUT_URL, 'workout-session/')
 NUTRITION_URL = urljoin(BASE_URL, 'api/nutrition/')
+SLEEP_URL = urljoin(BASE_URL, 'api/sleep/')
+LAST_SLEEP_URL = urljoin(SLEEP_URL, 'last_sleep/')
 
 NAMES_PATTERN = r'[А-Яа-я]'
 WIGHT_PATTERN = r'^[0-9]{2,3}?\.?[0-9]{0,2}$'
@@ -63,6 +68,3 @@ NOTIFICATIONS = (
     'НУ ПРАВДА, ПОЗАНИМАЙСЯ УЖЕ!',
     'НЕ ЗАБЫВАЙ СПАТЬ!'
 )
-
-SLEEP_URL = urljoin(BASE_URL, 'api/sleep/')
-LAST_SLEEP_URL = urljoin(SLEEP_URL, 'last_sleep/')
